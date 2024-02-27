@@ -12,13 +12,13 @@ export const navItems = [
   {
     id: 0,
     name: "Home",
-    link: "#",
+    link: "/",
     icon: <HomeOutlined className="text-xl md:text-2xl" />,
   },
   {
     id: 1,
     name: "Cart",
-    link: "#",
+    link: "/cart",
     badge: true,
     icon: (
       <Badge count={5}>
