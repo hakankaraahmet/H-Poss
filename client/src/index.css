@@ -3,13 +3,21 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   font-family: "Electrolize", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
-
 .ant-btn-primary {
   background-color: #1677ff;
+}
+
+@media (min-width: 768px) {
+  body {
+    overflow: hidden;
+  }
+
+  .categories::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -22,7 +22,7 @@ const Header = () => {
         </div>
         <div
           className={`menu-links flex justify-between items-center gap-7 md:static  bottom-0 w-screen bg-white
-        md:bg-transparent md:w-auto left-0 border-t md:border-t-0 md:px-0 px-4 py-2 fixed`}
+        md:bg-transparent md:w-auto left-0 border-t md:border-t-0 md:px-0 px-4 py-2 fixed z-50`}
         >
           {navItems.map((navItem) => (
             <a
