@@ -29,25 +29,25 @@ export const navItems = [
   {
     id: 2,
     name: "Bills",
-    link: "#",
+    link: "/",
     icon: <CopyOutlined className="text-xl md:text-2xl" />,
   },
   {
     id: 3,
     name: "Customers",
-    link: "#",
+    link: "/",
     icon: <UserOutlined className="text-xl md:text-2xl" />,
   },
   {
     id: 4,
     name: "Statistics",
-    link: "#",
+    link: "/",
     icon: <BarChartOutlined className="text-xl md:text-2xl" />,
   },
   {
     id: 5,
     name: "Logout",
-    link: "#",
+    link: "/",
     icon: <LogoutOutlined className="text-xl md:text-2xl" />,
   },
 ];
