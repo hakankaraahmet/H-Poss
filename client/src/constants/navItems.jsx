@@ -29,13 +29,13 @@ export const navItems = [
   {
     id: 2,
     name: "Bills",
-    link: "/",
+    link: "/bills",
     icon: <CopyOutlined className="text-xl md:text-2xl" />,
   },
   {
     id: 3,
     name: "Customers",
-    link: "/",
+    link: "/customers",
     icon: <UserOutlined className="text-xl md:text-2xl" />,
   },
   {
