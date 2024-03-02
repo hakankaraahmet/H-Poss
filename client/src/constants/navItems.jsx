@@ -41,7 +41,7 @@ export const navItems = [
   {
     id: 4,
     name: "Statistics",
-    link: "/",
+    link: "/statistics",
     icon: <BarChartOutlined className="text-xl md:text-2xl" />,
   },
   {
