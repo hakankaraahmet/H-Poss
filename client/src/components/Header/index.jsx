@@ -7,7 +7,7 @@ import { navItems } from "../../constants/navItems";
 const Header = () => {
   return (
     <div className="border-2 mb-6">
-      <header className="header py-4 px-6 flex justify-between items-center gap-10">
+      <header className="header py-4 px-6 flex justify-between items-center gap-10 3xl:w-2/3 3xl:mx-auto">
         <div className="logo">
           <Link to="/">
             <h2 className="text-2xl font-bold md:text-4xl">H-POS</h2>

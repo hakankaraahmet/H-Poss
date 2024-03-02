@@ -1,6 +1,6 @@
 import "./App.css";
 import Header from "./components/Header";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
 import BillsPage from "./pages/BillsPage";
@@ -11,19 +11,23 @@ import Login from "./pages/auth/Login";
 
 function App() {
   const location = useLocation();
-  const hideHeader = location.pathname === "/register" || "/login";
+  const hideHeader = ["/register", "/login"].includes(location.pathname);
+
   return (
     <>
       {!hideHeader && <Header />}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/bills" element={<BillsPage />} />
-        <Route path="/customers" element={<CustomersPage />} />
-        <Route path="/statistics" element={<StatisticPage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      <div className="3xl:w-2/3 mx-auto">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/bills" element={<BillsPage />} />
+          <Route path="/customers" element={<CustomersPage />} />
+          <Route path="/statistics" element={<StatisticPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/register" />} />
+        </Routes>
+      </div>
     </>
   );
 }
