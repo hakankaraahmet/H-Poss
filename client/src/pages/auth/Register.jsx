@@ -33,8 +33,23 @@ const Register = () => {
             </Form.Item>
             <Form.Item
               label="Please Enter Password Again"
+              dependencies={["password"]}
               name="passwordAgain"
-              rules={[{ required: true, message: "Password can't be empty!" }]}
+              rules={[
+                { required: true, message: "Password can't be empty!" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "The new password that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
+              ]}
             >
               <Input.Password />
             </Form.Item>
