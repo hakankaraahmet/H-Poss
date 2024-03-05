@@ -6,7 +6,7 @@ module.exports = {
   list: async (req, res) => {
     const data = await res.getModelList(Product, {}, [
       "categoryId",
-      "createdId",
+      "userId",
     ]);
     res.status(200).send({
       error: false,
@@ -25,7 +25,7 @@ module.exports = {
   read: async (req, res) => {
     const data = await Product.findOne({ _id: req.params.id }).populate([
       "categoryId",
-      "createdId",
+      "userId",
     ]);
     res.status(200).send({
       error: false,

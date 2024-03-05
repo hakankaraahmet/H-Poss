@@ -9,7 +9,7 @@ const CategorySchema = new mongoose.Schema(
       required: [true, "title is required"],
       unique: true,
     },
-    createdId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
       required: true,

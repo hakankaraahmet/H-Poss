@@ -4,7 +4,7 @@ const Category = require("../models/category.model");
 
 module.exports = {
   list: async (req, res) => {
-    const data = await res.getModelList(Category, {}, "createdId");
+    const data = await res.getModelList(Category, {}, "userId");
     res.status(200).send({
       error: false,
       details: await res.getModelListDetails(Category),
@@ -21,7 +21,7 @@ module.exports = {
   },
   read: async (req, res) => {
     const data = await Category.findOne({ _id: req.params.id }).populate(
-      "createdId"
+      "userId"
     );
     res.status(200).send({
       error: false,

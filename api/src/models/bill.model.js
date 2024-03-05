@@ -34,7 +34,7 @@ const BillSchema = new mongoose.Schema(
       type: Array,
       required: [true, "Cart items is required"],
     },
-    createdId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
       required: true,
