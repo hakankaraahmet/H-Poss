@@ -20,9 +20,6 @@ app.all("/", (req, res) => {
   res.send({
     error: false,
     message: `Welcome to ${process.env.PROJECT_NAME}`,
-    documents: "/documents",
-    isLogin: req.isLogin,
-    user: req.user,
   });
 });
 

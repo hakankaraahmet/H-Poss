@@ -3,7 +3,8 @@
 const router = require("express").Router();
 const user = require("../controllers/user.controller");
 
-router.route("/").get(user.list).post(user.create);
+router.get("/", user.list);
+router.post("/register", user.create);
 router
   .route("/:id")
   .get(user.read)
