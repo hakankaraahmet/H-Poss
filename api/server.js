@@ -13,6 +13,7 @@ const { dbConnection } = require("./src/configs/dbConnection");
 dbConnection();
 // --------***--------MIDDLEWARES
 app.use(express.json());
+app.use(require("./src/middlewares/authentication"));
 app.use(require("./src/middlewares/findSearchSortPage"));
 
 // --------***--------ROUTERS
@@ -20,6 +21,8 @@ app.all("/", (req, res) => {
   res.send({
     error: false,
     message: `Welcome to ${process.env.PROJECT_NAME}`,
+    isLogin: req.isLogin,
+    user: req.user,
   });
 });
 
