@@ -6,6 +6,10 @@ const initialState = {
   error: "",
   addingStatus: "idle",
   addingError: "",
+  editStatus: "idle",
+  editError: "",
+  deleteStatus: "idle",
+  deleteError: "",
 };
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -35,12 +39,51 @@ export const addCategory = createAsyncThunk(
         headers: { "Content-type": "application/json; charset=UTF-8" },
       });
       const data = await res.json();
-      console.log("res :>> ", res);
       if (res.ok) {
         return data.data;
       } else {
         return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+
+export const editCategory = createAsyncThunk(
+  "categories/editCategory",
+  async ({ id, categoryData }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`${baseUrl}/categories/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(categoryData),
+        mode: "cors",
+        credentials: "same-origin",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      });
+      const data = await res.json();
+      if (res.ok) {
+        return data.data;
+      } else {
+        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+
+export const deleteCategory = createAsyncThunk(
+  "categories/deleteCategory",
+  async (id) => {
+    try {
+      const res = await fetch(`${baseUrl}/categories/${id}`, {
+        method: "DELETE",
+        mode: "cors",
+        credentials: "same-origin",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      });
+      return id;
     } catch (error) {
       throw new Error(error);
     }
@@ -74,6 +117,32 @@ const categorySlice = createSlice({
       .addCase(addCategory.rejected, (state, action) => {
         state.addingStatus = "failed";
         state.addingError = action.payload || "Unknown error";
+      })
+      .addCase(editCategory.pending, (state) => {
+        state.editStatus = "loading";
+      })
+      .addCase(editCategory.fulfilled, (state, action) => {
+        state.editStatus = "succeeded";
+        state.categories = state.categories.map((category) =>
+          category._id === action.payload._id ? action.payload : category
+        );
+      })
+      .addCase(editCategory.rejected, (state, action) => {
+        state.editStatus = "failed";
+        state.editError = action.payload || "Unknown error";
+      })
+      .addCase(deleteCategory.pending, (state) => {
+        state.deleteStatus = "loading";
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.deleteStatus = "succeeded";
+        state.categories = state.categories.filter(
+          (category) => category._id !== action.payload
+        );
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.deleteStatus = "failed";
+        state.deleteError = action.payload || "Unknown error";
       });
   },
 });
