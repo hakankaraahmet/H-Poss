@@ -1,11 +1,13 @@
 "use strict";
 
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 require("dotenv").config();
 const PORT = process.env.PORT ?? "8000";
 require("express-async-errors");
+app.use(cors());
 // -------------------------------***-------------------------------
 
 // --------***--------DB CONNECTION
@@ -15,6 +17,8 @@ dbConnection();
 app.use(express.json());
 app.use(require("./src/middlewares/authentication"));
 app.use(require("./src/middlewares/findSearchSortPage"));
+app.use(require("./src/middlewares/cors"));
+
 
 // --------***--------ROUTERS
 app.all("/", (req, res) => {
