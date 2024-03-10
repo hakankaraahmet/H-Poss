@@ -29,6 +29,7 @@ const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
       }, 1500);
     }
   }, [addingStatus]);
+  
 
   return (
     <Modal

@@ -22,11 +22,11 @@ const ProductSchema = new mongoose.Schema(
       ref: "categories",
       required: true,
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-      required: true,
-    },
+    // userId: {  //ALERT User id olayi eklenecek
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "users",
+    //   required: true,
+    // },
   },
   { collection: "products", timestamps: true }
 );

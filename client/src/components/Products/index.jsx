@@ -1,178 +1,45 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { PlusOutlined, EditOutlined } from "@ant-design/icons";
+import ProductItem from "./ProductItem";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../../redux/productSlice";
+import "../style.css";
+import AddProduct from "./AddProducts";
+import { Link } from "react-router-dom";
 const Products = () => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const { products, status } = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
+
   return (
     <div className="products-wrapper grid gap-4 grid-cols-card">
-      <div className="product-item border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none">
-        <div className="product-image">
-          <img
-            src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-            alt="elma"
-            className="h-28 object-cover w-full border-b rounded-t-xl "
-          />
-        </div>
-        <div className="product-info flex flex-col p-3">
-          <span className="font-bold capitalize">Elma</span>
-          <span>2$</span>
-        </div>
+      {status === "loading" ? (
+        <p>Products are loading...</p>
+      ) : (
+        products.map((product) => (
+          <ProductItem key={product._id} product={product} />
+        ))
+      )}
+      <div
+        onClick={() => {setIsAddModalOpen(true)}}
+        className=" product-item add-item flex justify-center items-center border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none in-h-[180px]"
+      >
+        <PlusOutlined className="md:text-3xl text-white " />
       </div>
-      <div className="product-item">
-        <div className="product-image">
-          <img
-            src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-            alt="elma"
-            className="h-28 object-cover w-full border-b"
-          />
-        </div>
-        <div className="product-info">
-          <span className="font-bold capitalize">Elma</span>
-          <span>2$</span>
-        </div>
-      </div>
-      <div className="product-item">
-      <div className="product-image">
-        <img
-          src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-          alt="elma"
-          className="h-28 object-cover w-full border-b"
-        />
-      </div>
-      <div className="product-info">
-        <span className="font-bold capitalize">Elma</span>
-        <span>2$</span>
-      </div>
-    </div>
-    <div className="product-item">
-    <div className="product-image">
-      <img
-        src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-        alt="elma"
-        className="h-28 object-cover w-full border-b"
+      <Link
+        to={"/products"}
+        className=" product-item edit-item flex justify-center items-center border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none min-h-[180px]"
+      >
+        <EditOutlined className="md:text-3xl text-white " />
+      </Link>
+      <AddProduct
+        isModalOpen={isAddModalOpen}
+        setIsAddModalOpen={setIsAddModalOpen}
       />
-    </div>
-    <div className="product-info">
-      <span className="font-bold capitalize">Elma</span>
-      <span>2$</span>
-    </div>
-  </div>
-  <div className="product-item">
-  <div className="product-image">
-    <img
-      src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-      alt="elma"
-      className="h-28 object-cover w-full border-b"
-    />
-  </div>
-  <div className="product-info">
-    <span className="font-bold capitalize">Elma</span>
-    <span>2$</span>
-  </div>
-</div>
-<div className="product-item">
-<div className="product-image">
-  <img
-    src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-    alt="elma"
-    className="h-28 object-cover w-full border-b"
-  />
-</div>
-<div className="product-info">
-  <span className="font-bold capitalize">Elma</span>
-  <span>2$</span>
-</div>
-</div>
-<div className="product-item">
-<div className="product-image">
-  <img
-    src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-    alt="elma"
-    className="h-28 object-cover w-full border-b"
-  />
-</div>
-<div className="product-info">
-  <span className="font-bold capitalize">Elma</span>
-  <span>2$</span>
-</div>
-</div>
-<div className="product-item">
-<div className="product-image">
-  <img
-    src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-    alt="elma"
-    className="h-28 object-cover w-full border-b"
-  />
-</div>
-<div className="product-info">
-  <span className="font-bold capitalize">Elma</span>
-  <span>2$</span>
-</div>
-</div>
-<div className="product-item">
-<div className="product-image">
-  <img
-    src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-    alt="elma"
-    className="h-28 object-cover w-full border-b"
-  />
-</div>
-<div className="product-info">
-  <span className="font-bold capitalize">Elma</span>
-  <span>2$</span>
-</div>
-</div>
-<div className="product-item">
-<div className="product-image">
-  <img
-    src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-    alt="elma"
-    className="h-28 object-cover w-full border-b"
-  />
-</div>
-<div className="product-info">
-  <span className="font-bold capitalize">Elma</span>
-  <span>2$</span>
-</div>
-</div>
-<div className="product-item">
-<div className="product-image">
-  <img
-    src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-    alt="elma"
-    className="h-28 object-cover w-full border-b"
-  />
-</div>
-<div className="product-info">
-  <span className="font-bold capitalize">Elma</span>
-  <span>2$</span>
-</div>
-</div>
-<div className="product-item">
-<div className="product-image">
-  <img
-    src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-    alt="elma"
-    className="h-28 object-cover w-full border-b"
-  />
-</div>
-<div className="product-info">
-  <span className="font-bold capitalize">Elma</span>
-  <span>2$</span>
-</div>
-</div>
-<div className="product-item">
-<div className="product-image">
-  <img
-    src="https://i.lezzet.com.tr/images-xxlarge-secondary/elma-cekirdegi-zehirli-midir-48309b3d-48d3-456f-8433-084af2fdb19c.jpg"
-    alt="elma"
-    className="h-28 object-cover w-full border-b"
-  />
-</div>
-<div className="product-info">
-  <span className="font-bold capitalize">Elma</span>
-  <span>2$</span>
-</div>
-</div>
-
     </div>
   );
 };

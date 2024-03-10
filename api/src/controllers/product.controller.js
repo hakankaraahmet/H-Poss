@@ -4,10 +4,8 @@ const Product = require("../models/product.model");
 
 module.exports = {
   list: async (req, res) => {
-    const data = await res.getModelList(Product, {}, [
-      "categoryId",
-      "userId",
-    ]);
+    // const data = await res.getModelList(Product, {}, ["categoryId","userId"]);
+    const data = await res.getModelList(Product, {}, ["categoryId"]); // ALERT burasi userId olunca eklenecek
     res.status(200).send({
       error: false,
       details: await res.getModelListDetails(Product),
@@ -23,9 +21,9 @@ module.exports = {
     });
   },
   read: async (req, res) => {
+    // const data = await Product.findOne({ _id: req.params.id }).populate(["categoryId","userId"]); // ALERT burasi userId olunca eklenecek
     const data = await Product.findOne({ _id: req.params.id }).populate([
       "categoryId",
-      "userId",
     ]);
     res.status(200).send({
       error: false,

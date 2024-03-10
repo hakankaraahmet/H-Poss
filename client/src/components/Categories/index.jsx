@@ -4,7 +4,7 @@ import EditCategories from "./EditCategories";
 import { PlusOutlined, EditOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../redux/categorySlice.js";
-import "./style.css";
+import "../style.css";
 const Categories = () => {
   const { categories, status } = useSelector((state) => state.categories);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

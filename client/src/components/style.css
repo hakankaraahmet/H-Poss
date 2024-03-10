@@ -1,0 +1,39 @@
+.category-item {
+  background-image: linear-gradient(to right, #68d391, #48bb78, #68d391);
+  user-select: none;
+  text-align: center;
+  color: #ffffff;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  width: 100%;
+  border-radius: 1rem;
+  cursor: pointer;
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-item:hover {
+  background-image: linear-gradient(to right, #2f855a, #22543d);
+}
+
+.add-item {
+  background: linear-gradient(to right, #9f7aea 0%, #7f4bc9 100%);
+  transition: background 0.3s ease;
+}
+
+.add-item:hover {
+  background: linear-gradient(to right, #7f4bc9 0%, #602080 100%);
+}
+
+.edit-item {
+  background: linear-gradient(to right, #ffbb6e 0%, #ff9f3e 100%);
+  transition: background 0.3s ease;
+}
+
+.edit-item:hover {
+  background: linear-gradient(to right, #ff9f3e 0%, #ff7a16 100%);
+}

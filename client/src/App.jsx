@@ -8,6 +8,7 @@ import CustomersPage from "./pages/CustomersPage";
 import StatisticPage from "./pages/StatisticPage";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
+import ProductsPage from "./pages/ProductsPage";
 
 function App() {
   const location = useLocation();
@@ -22,6 +23,7 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/bills" element={<BillsPage />} />
           <Route path="/customers" element={<CustomersPage />} />
+          <Route path="/products" element={<ProductsPage />} />
           <Route path="/statistics" element={<StatisticPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
