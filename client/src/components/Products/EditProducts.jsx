@@ -5,6 +5,8 @@ import {
   deleteProduct,
   editProduct,
   fetchProducts,
+  resetDeleteStatus,
+  resetEditStatus
 } from "../../redux/productSlice";
 import { fetchCategories } from "../../redux/categorySlice";
 const EditProducts = () => {
@@ -48,8 +50,9 @@ const EditProducts = () => {
   useEffect(() => {
     if (deleteStatus === "succeeded") {
       message.success("Product is deleted successfully");
+      dispatch(resetDeleteStatus());
     }
-  }, [deleteStatus]);
+  }, [deleteStatus, dispatch]);
 
 
   const columns = [
@@ -122,6 +125,7 @@ const EditProducts = () => {
   useEffect(() => {
     if (editStatus === "succeeded") {
       message.success("Product is edited successfully");
+      dispatch(resetEditStatus());
       dispatch(fetchProducts());
       setIsEditModalOpen(false);
     } else if (editStatus === "failed") {

@@ -5,6 +5,8 @@ import {
   deleteCategory,
   editCategory,
   fetchCategories,
+  resetDeleteStatus,
+  resetEditStatus,
 } from "../../redux/categorySlice";
 const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
   const [editingRow, setEditingRow] = useState({});
@@ -24,19 +26,21 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
   };
 
   useEffect(() => {
-    if (deleteStatus === "succeeded") {
-      message.success("Category is deleted successfully");
-      setIsEditModalOpen(false);
-    }
-  }, [deleteStatus]);
-
-  useEffect(() => {
     if (editStatus === "succeeded") {
       message.success("Category is edited successfully");
       setIsEditModalOpen(false);
+      dispatch(resetEditStatus());
       dispatch(fetchCategories());
     }
   }, [editStatus]);
+  
+  useEffect(() => {
+    if (deleteStatus === "succeeded") {
+      message.success("Category is deleted successfully");
+      setIsEditModalOpen(false);
+      dispatch(resetDeleteStatus());
+    }
+  }, [deleteStatus, setIsEditModalOpen, dispatch]);
 
   const columns = [
     {

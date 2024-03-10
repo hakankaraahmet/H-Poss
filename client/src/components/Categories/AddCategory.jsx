@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { addCategory } from "../../redux/categorySlice";
+import { addCategory, resetAddStatus } from "../../redux/categorySlice";
 import { message } from "antd";
 
 const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
   const [showError, setShowError] = useState(false);
-  const { addingStatus, addingError } = useSelector(
+  const { addingStatus, addingError, categories } = useSelector(
     (state) => state.categories
   );
   const dispatch = useDispatch();
@@ -20,6 +20,7 @@ const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
   useEffect(() => {
     if (addingStatus === "succeeded") {
       message.success("Category is added successfully");
+      dispatch(resetAddStatus());
       setIsAddModalOpen(false);
     } else if (addingStatus === "failed") {
       setShowError(true);

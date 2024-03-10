@@ -53,8 +53,8 @@ export const addProduct = createAsyncThunk(
 export const editProduct = createAsyncThunk(
   "products/editProduct",
   async ({ id, productData }, { rejectWithValue }) => {
-    console.log('productData :>> ', productData);
-    console.log('id :>> ', id);
+    console.log("productData :>> ", productData);
+    console.log("id :>> ", id);
     try {
       const res = await fetch(`${baseUrl}/products/${id}`, {
         method: "PUT",
@@ -95,7 +95,17 @@ export const deleteProduct = createAsyncThunk(
 const productSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAddStatus: (state) => {
+      state.addingStatus = "idle";
+    },
+    resetEditStatus: (state) => {
+      state.editStatus = "idle";
+    },
+    resetDeleteStatus: (state) => {
+      state.deleteStatus = "idle";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -118,7 +128,7 @@ const productSlice = createSlice({
       })
       .addCase(addProduct.rejected, (state, action) => {
         state.addingStatus = "failed";
-        state.addingError = action.payload || "Unknown error";
+        state.addingError = action.error.message || "Unknown error";
       })
       .addCase(editProduct.pending, (state) => {
         state.editStatus = "loading";
@@ -131,7 +141,7 @@ const productSlice = createSlice({
       })
       .addCase(editProduct.rejected, (state, action) => {
         state.editStatus = "failed";
-        state.editError = action.payload || "Unknown error";
+        state.editError = action.error.message || "Unknown error";
       })
       .addCase(deleteProduct.pending, (state) => {
         state.deleteStatus = "loading";
@@ -144,9 +154,12 @@ const productSlice = createSlice({
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.deleteStatus = "failed";
-        state.deleteError = action.payload || "Unknown error";
+        state.deleteError = action.error.message || "Unknown error";
       });
   },
 });
+
+export const { resetAddStatus, resetDeleteStatus, resetEditStatus } =
+  productSlice.actions;
 
 export default productSlice.reducer;

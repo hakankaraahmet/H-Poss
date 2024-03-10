@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Modal, message, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct } from "../../redux/productSlice";
-import { fetchCategories } from "../../redux/categorySlice";
+import { addProduct, resetAddStatus } from "../../redux/productSlice";
 
 const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
   const [showError, setShowError] = useState(false);
@@ -12,7 +11,7 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log('values :>> ', values);
+    console.log("values :>> ", values);
     const selectedCategory = categories.find(
       (item) => item._id === values.categoryId
     );
@@ -23,6 +22,7 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
   useEffect(() => {
     if (addingStatus === "succeeded") {
       message.success("Product is added successfully");
+      dispatch(resetAddStatus());
       setIsAddModalOpen(false);
     } else if (addingStatus === "failed") {
       setShowError(true);
@@ -33,9 +33,7 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
     }
   }, [addingStatus]);
 
-
-
-  console.log('categories :>> ', categories);
+  console.log("categories :>> ", categories);
 
   return (
     <Modal

@@ -43,7 +43,7 @@ export const addCategory = createAsyncThunk(
       });
       const data = await res.json();
       if (res.ok) {
-      return data.data
+        return data.data;
       } else {
         return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
@@ -56,7 +56,6 @@ export const addCategory = createAsyncThunk(
 export const editCategory = createAsyncThunk(
   "categories/editCategory",
   async ({ id, categoryData }, { rejectWithValue }) => {
-    console.log('categoryData :>> ', categoryData);
     try {
       const res = await fetch(`${baseUrl}/categories/${id}`, {
         method: "PUT",
@@ -97,7 +96,17 @@ export const deleteCategory = createAsyncThunk(
 const categorySlice = createSlice({
   name: "categories",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAddStatus: (state) => {
+      state.addingStatus = "idle";
+    },
+    resetEditStatus: (state) => {
+      state.editStatus = "idle";
+    },
+    resetDeleteStatus: (state) => {
+      state.deleteStatus = "idle";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCategories.pending, (state) => {
@@ -120,7 +129,7 @@ const categorySlice = createSlice({
       })
       .addCase(addCategory.rejected, (state, action) => {
         state.addingStatus = "failed";
-        state.addingError = action.payload || "Unknown error";
+        state.addingError = action.error.message || "Unknown error";
       })
       .addCase(editCategory.pending, (state) => {
         state.editStatus = "loading";
@@ -133,7 +142,7 @@ const categorySlice = createSlice({
       })
       .addCase(editCategory.rejected, (state, action) => {
         state.editStatus = "failed";
-        state.editError = action.payload || "Unknown error";
+        state.editError = action.error.message || "Unknown error";
       })
       .addCase(deleteCategory.pending, (state) => {
         state.deleteStatus = "loading";
@@ -146,9 +155,11 @@ const categorySlice = createSlice({
       })
       .addCase(deleteCategory.rejected, (state, action) => {
         state.deleteStatus = "failed";
-        state.deleteError = action.payload || "Unknown error";
+        state.deleteError = action.error.message || "Unknown error";
       });
   },
 });
 
+export const { resetAddStatus, resetDeleteStatus, resetEditStatus } =
+  categorySlice.actions;
 export default categorySlice.reducer;
