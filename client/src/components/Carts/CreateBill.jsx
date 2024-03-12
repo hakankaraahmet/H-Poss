@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Form, Modal, Input, Select, Card, Button, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { addBill, fetchBills, resetAddStatus } from "../../redux/billSlice";
+import { addBill, resetAddStatus } from "../../redux/billSlice";
 import { resetCart } from "../../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -43,10 +43,6 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
       }, 1500);
     }
   }, [addingStatus]);
-
-  useEffect(() => {
-    dispatch(fetchBills());
-  }, []);
 
   console.log("bills :>> ", bills);
   return (

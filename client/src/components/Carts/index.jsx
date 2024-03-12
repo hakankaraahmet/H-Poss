@@ -87,7 +87,7 @@ const Carts = () => {
                 />
               </div>
             </li>
-          ))
+          )).reverse()
         )}
       </ul>
       <div className="cart-totals mt-auto">

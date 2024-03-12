@@ -99,6 +99,7 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
           columns={columns}
           rowKey={"_id"}
           bordered
+          scroll={{ x: 1000, y: 600 }}
         />
       </Form>
     </Modal>
