@@ -12,7 +12,7 @@ const HomePage = () => {
         <div className="products flex-[8] max-h-[calc(100vh_-_112px)] overflow-y-auto pb-10">
           <Products />
         </div>
-        <div className="carts min-w-[300px] md:-mr-6 md:-mt-6 border md:border-l">
+        <div className="carts min-w-[300px] md:-mr-6 md:-mt-6 border md:border-l h-screen">
           <Carts />
         </div>
       </div>

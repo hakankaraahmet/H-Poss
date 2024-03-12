@@ -53,8 +53,6 @@ export const addProduct = createAsyncThunk(
 export const editProduct = createAsyncThunk(
   "products/editProduct",
   async ({ id, productData }, { rejectWithValue }) => {
-    console.log("productData :>> ", productData);
-    console.log("id :>> ", id);
     try {
       const res = await fetch(`${baseUrl}/products/${id}`, {
         method: "PUT",

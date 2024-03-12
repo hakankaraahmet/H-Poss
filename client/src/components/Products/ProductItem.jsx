@@ -1,8 +1,18 @@
-import React from "react";
+import { addProduct } from "../../redux/cartSlice";
+import { useDispatch } from "react-redux";
+import { message } from "antd";
 
 const ProductItem = ({ product }) => {
+  const dispatch = useDispatch();
+  const handleClick = () => {
+    dispatch(addProduct({ ...product, quantity: 1 }));
+    message.success("Product is added successfully");
+  };
   return (
-    <div className="product-item border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none">
+    <div
+      onClick={handleClick}
+      className="product-item border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none"
+    >
       <div className="product-image">
         <img
           src={product.img}

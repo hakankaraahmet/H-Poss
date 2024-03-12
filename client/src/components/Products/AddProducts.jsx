@@ -33,7 +33,6 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
     }
   }, [addingStatus]);
 
-  console.log("categories :>> ", categories);
 
   return (
     <Modal

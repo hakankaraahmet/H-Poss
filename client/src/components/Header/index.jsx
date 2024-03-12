@@ -1,10 +1,64 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Input } from "antd";
-import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import {
+  ShoppingCartOutlined,
+  HomeOutlined,
+  SearchOutlined,
+  CopyOutlined,
+  UserOutlined,
+  BarChartOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 import { Badge } from "antd";
-import { navItems } from "../../constants/navItems";
 const Header = () => {
+  const { cartItems } = useSelector((state) => state.cart);
+
+  const navItems = [
+    {
+      id: 0,
+      name: "Home",
+      link: "/",
+      icon: <HomeOutlined className="text-xl md:text-2xl" />,
+    },
+    {
+      id: 1,
+      name: "Cart",
+      link: "/cart",
+      badge: true,
+      icon: (
+        <Badge count={cartItems.length}>
+          <ShoppingCartOutlined className="text-xl md:text-2xl" />
+        </Badge>
+      ),
+    },
+    {
+      id: 2,
+      name: "Bills",
+      link: "/bills",
+      icon: <CopyOutlined className="text-xl md:text-2xl" />,
+    },
+    {
+      id: 3,
+      name: "Customers",
+      link: "/customers",
+      icon: <UserOutlined className="text-xl md:text-2xl" />,
+    },
+    {
+      id: 4,
+      name: "Statistics",
+      link: "/statistics",
+      icon: <BarChartOutlined className="text-xl md:text-2xl" />,
+    },
+    {
+      id: 5,
+      name: "Logout",
+      link: "/",
+      icon: <LogoutOutlined className="text-xl md:text-2xl" />,
+    },
+  ];
+
   return (
     <div className="border-2 mb-6">
       <header className="header py-4 px-6 flex justify-between items-center gap-10 3xl:w-2/3 3xl:mx-auto">
@@ -44,7 +98,7 @@ const Header = () => {
           to="/"
           className={`flex flex-col items-center hover:text-[#40a9ff] transition-all md:hidden`}
         >
-          <Badge count={5}>
+          <Badge count={cartItems.length}>
             <ShoppingCartOutlined className="text-2xl" />
           </Badge>
           <span className="text-xs ">Cart</span>
