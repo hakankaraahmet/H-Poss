@@ -11,7 +11,6 @@ const BillSchema = new mongoose.Schema(
     customerPhoneNumber: {
       type: String,
       required: [true, "Customer phone is required"],
-      unique: true,
     },
     paymentMethod: {
       type: String,
@@ -34,11 +33,11 @@ const BillSchema = new mongoose.Schema(
       type: Array,
       required: [true, "Cart items is required"],
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-      required: true,
-    },
+    // userId: { //ALERT User id olayi eklenecek
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "users",
+    //   required: true,
+    // },
   },
   { collection: "bills", timestamps: true }
 );

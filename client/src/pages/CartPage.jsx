@@ -1,69 +1,148 @@
 import React, { useState } from "react";
-import { Table, Card, Button } from "antd";
+import { Table, Card, Button, message, Popconfirm } from "antd";
 import CreateBill from "../components/Carts/CreateBill";
+import { useDispatch, useSelector } from "react-redux";
+import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { deleteCart, increaseCart, reduceCart } from "../redux/cartSlice";
 
-const dataSource = [
-  {
-    key: "1",
-    name: "Mike",
-    age: 32,
-    address: "10 Downing Street",
-  },
-  {
-    key: "2",
-    name: "John",
-    age: 42,
-    address: "10 Downing Street",
-  },
-];
-
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-];
 const CartPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { cartItems, total, tax } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const taxAmount = (total * tax) / 100;
+  const onReduce = (item) => {
+    if (item.quantity === 1) {
+      if (window.confirm("Are you sure to delete product?")) {
+        dispatch(reduceCart(item));
+        message.success("Products are deleted successfully");
+      }
+    } else {
+      dispatch(reduceCart(item));
+    }
+  };
+
+  const columns = [
+    {
+      title: "Product Image",
+      dataIndex: "img",
+      width: "8%",
+      render: (_, record) => {
+        return (
+          <img
+            src={record.img}
+            alt={record.title}
+            className="w-20 h-20 object-contain"
+          />
+        );
+      },
+    },
+    {
+      title: "Product Name",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "Category",
+      dataIndex: "categoryId",
+      render: (_, record) => {
+        return <p>{record.categoryId.title}</p>;
+      },
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      render: (_, record) => {
+        return <p>{record.price.toFixed(2)} $</p>;
+      },
+    },
+    {
+      title: "Product Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+      render: (_, record) => {
+        return (
+          <div className="flex items-center ">
+            <Button
+              type="primary"
+              size="small"
+              className="w-full  flex items-center justify-center rounded-full"
+              icon={<MinusCircleOutlined />}
+              onClick={() => onReduce(record)}
+            />
+            <span className="font-bold inline-flex text-center w-6 justify-center">
+              {record.quantity}
+            </span>
+            <Button
+              type="primary"
+              size="small"
+              className="w-full  flex items-center justify-center rounded-full"
+              icon={<PlusCircleOutlined />}
+              onClick={() => dispatch(increaseCart(record))}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      title: "Total Price",
+      render: (_, record) => {
+        return <p>{(record.price * record.quantity).toFixed(2)} $</p>;
+      },
+    },
+    {
+      title: "Action",
+      render: (_, record) => {
+        return (
+          <Popconfirm
+            title="Are you sure to delete?"
+            onConfirm={() => {
+              dispatch(deleteCart(record));
+              message.success("Product is deleted successfully");
+            }}
+          >
+            <Button type="link" danger>
+              {" "}
+              Delete
+            </Button>
+          </Popconfirm>
+        );
+      },
+    },
+  ];
 
   return (
     <div className="px-6">
       <Table
-        dataSource={dataSource}
+        dataSource={cartItems}
         columns={columns}
         bordered
         pagination={false}
+        scroll={{ x: 1200, y: 300 }}
       />
       <div className="cart-total flex justify-end mt-4">
         <Card className="w-72 select-none">
           <div className="flex justify-between">
             <span>Subtotal</span>
-            <span>90$</span>
+            <span>{total > 0 ? total.toFixed(2) : 0}$</span>
           </div>
           <div className="flex justify-between my-2">
-            <span>VAT Total %8</span>
-            <span className="text-red-600">+10$</span>
+            <b>VAT %{tax}</b>
+            <span className="text-red-700">
+              {taxAmount > 0 && "+"}{" "}
+              {taxAmount > 0 ? taxAmount.toFixed(2) : taxAmount}$
+            </span>
           </div>
           <div className="flex justify-between font-bold">
             <span>Total</span>
-            <span>100$</span>
+            <span className="text-xl">{(total + taxAmount).toFixed(2)}$</span>
           </div>
           <Button
             type="primary"
             className=" w-full mt-4 capitalize select-none"
             size="large"
             onClick={() => setIsModalOpen(true)}
+            disabled={cartItems.length === 0}
           >
             Create Order
           </Button>
