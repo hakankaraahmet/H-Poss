@@ -13,21 +13,47 @@ import ProductsPage from "./pages/ProductsPage";
 function App() {
   const location = useLocation();
   const hideHeader = ["/register", "/login"].includes(location.pathname);
+  const isLoggedIn = sessionStorage.getItem("userToken");
 
   return (
     <>
       {!hideHeader && <Header />}
       <div className="3xl:w-2/3 mx-auto">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/bills" element={<BillsPage />} />
-          <Route path="/customers" element={<CustomersPage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/statistics" element={<StatisticPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/register" />} />
+          <Route
+            path="/cart"
+            element={isLoggedIn ? <CartPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/bills"
+            element={isLoggedIn ? <BillsPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/customers"
+            element={isLoggedIn ? <CustomersPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/products"
+            element={isLoggedIn ? <ProductsPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/statistics"
+            element={isLoggedIn ? <StatisticPage /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/"
+            element={isLoggedIn ? <HomePage /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/register"
+            element={isLoggedIn ? <Navigate to="/" /> : <Register />}
+          />
+          <Route
+            path="/login"
+            element={isLoggedIn ? <Navigate to="/" /> : <Login />}
+          />
+          <Route path="*" element={isLoggedIn ? <Navigate to="/" /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </>

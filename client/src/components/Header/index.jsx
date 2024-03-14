@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Input } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Input, message } from "antd";
 import { useSelector } from "react-redux";
 import {
   ShoppingCartOutlined,
@@ -14,6 +14,33 @@ import {
 import { Badge } from "antd";
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
+  const navigate = useNavigate();
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+  const token = sessionStorage.getItem("userToken");
+
+  console.log("token :>> ", token);
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+  };
+
+  const handleLogout = async () => {
+    if (window.confirm("Are you sure to Logout?")) {
+      sessionStorage.removeItem("userToken");
+      navigate("/login");
+      message.success("Successfully logged out");
+      try {
+        const res = await fetch(`${baseUrl}/auth/logout`, requestOptions);
+        const data = await res.json();
+        return data;
+      } catch (error) {
+        throw new Error("Failed to fetch Bill from the API.");
+      }
+    }
+  };
 
   const navItems = [
     {
@@ -51,12 +78,6 @@ const Header = () => {
       link: "/statistics",
       icon: <BarChartOutlined className="text-xl md:text-2xl" />,
     },
-    {
-      id: 5,
-      name: "Logout",
-      link: "/",
-      icon: <LogoutOutlined className="text-xl md:text-2xl" />,
-    },
   ];
 
   return (
@@ -93,6 +114,13 @@ const Header = () => {
               </span>
             </Link>
           ))}
+          <div
+            onClick={handleLogout}
+            className={`flex flex-col items-center hover:text-[#40a9ff] transition-all cursor-pointer`}
+          >
+            <LogoutOutlined className="text-xl md:text-2xl" />
+            <span className="md:text-xs text-[10px] mt-1">Logout</span>
+          </div>
         </div>
         <Link
           to="/"
