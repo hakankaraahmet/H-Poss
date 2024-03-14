@@ -1,97 +1,103 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 import StatisticCards from "../components/Statistics/StatisticCards";
-import { statisticsCards } from "../constants/statistics";
+import { Spin } from "antd";
 import { Area, Pie } from "@ant-design/plots";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBills } from "../redux/billSlice";
+import { fetchProducts } from "../redux/productSlice";
 const StatisticPage = () => {
-  const [data, setData] = useState([]);
-
-  const asyncFetch = () => {
-    fetch(
-      "https://gw.alipayobjects.com/os/bmw-prod/360c3eae-0c73-46f0-a982-4746a6095010.json"
-    )
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => {
-        console.log("fetch data failed", error);
-      });
-  };
+  const { products } = useSelector((state) => state.products);
+  const { bills, status } = useSelector((state) => state.bills);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    asyncFetch();
+    dispatch(fetchBills());
+    dispatch(fetchProducts());
   }, []);
 
-  const data2 = [
-    {
-      type: "分类一",
-      value: 27,
-    },
-    {
-      type: "分类二",
-      value: 25,
-    },
-    {
-      type: "分类三",
-      value: 18,
-    },
-    {
-      type: "分类四",
-      value: 15,
-    },
-    {
-      type: "分类五",
-      value: 10,
-    },
-    {
-      type: "其他",
-      value: 5,
-    },
-  ];
+  const transformedBills = Object.values(
+    bills.reduce((acc, { customerName, subTotal }) => {
+      acc[customerName] = acc[customerName] || { customerName, subTotal: 0 };
+      acc[customerName].subTotal += subTotal;
+      return acc;
+    }, {})
+  );
+
+  const totalAmount = () => {
+    const amount = bills.reduce((total, item) => item.totalAmount + total, 0);
+    return `${amount.toFixed(2)}$`;
+  };
 
   const config = {
-    data,
-    xField: "timePeriod",
-    yField: "value",
+    data: transformedBills,
+    xField: "customerName",
+    yField: "subTotal",
     xAxis: {
       range: [0, 1],
     },
   };
 
   const config2 = {
-    appendPadding: 10,
-    data: data2,
-    angleField: "value",
-    colorField: "type",
-    radius: 1,
+    data: transformedBills,
+    angleField: "subTotal",
+    colorField: "customerName",
+    isStack: true,
+    paddingRight: 80,
     innerRadius: 0.6,
     label: {
-      type: "inner",
-      offset: "-50%",
-      content: "{value}",
+      text: "subTotal",
       style: {
-        textAlign: "center",
-        fontSize: 14,
+        fontWeight: "bold",
       },
     },
-    interactions: [
-      {
-        type: "element-selected",
+    legend: {
+      color: {
+        title: false,
+        position: "right",
+        rowPadding: 5,
       },
+    },
+    annotations: [
       {
-        type: "element-active",
+        type: "text",
+        style: {
+          text: "Total\nValue",
+          x: "50%",
+          y: "50%",
+          textAlign: "center",
+          fontSize: 40,
+          fontStyle: "bold",
+        },
       },
     ],
-    statistic: {
-      title: false,
-      content: {
-        style: {
-          whiteSpace: "pre-wrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        },
-        content: "AntV\nG2Plot",
-      },
-    },
   };
+
+  const statisticsCards = [
+    {
+      id: 0,
+      title: "Total Customer",
+      info: [...new Set(bills.map((item) => item.customerName))].length,
+      image: "/person.svg",
+    },
+    {
+      id: 1,
+      title: "Total Income",
+      info: totalAmount(),
+      image: "/money.svg",
+    },
+    {
+      id: 2,
+      title: "Total Sales",
+      info: bills.length,
+      image: "/sale.svg",
+    },
+    {
+      id: 3,
+      title: "Total Products",
+      info: products.length,
+      image: "/product.svg",
+    },
+  ];
   return (
     <div className="px-6 pb-20">
       <h1 className="text-4xl font-bold text-center mb-4 select-none">
@@ -111,10 +117,24 @@ const StatisticPage = () => {
         </div>
         <div className="flex flex-col lg:flex-row gap-10 justify-between ">
           <div className="lg:w-1/2 h-72 lg:h-1/2">
-            <Area {...config} />
+            {status === "succeeded" ? (
+              <Area {...config} />
+            ) : (
+              <Spin
+                size="large"
+                className="absolute top-1/2 h-screen w-screen flex justify-center"
+              />
+            )}
           </div>
           <div className="lg:w-1/2 h-72 lg:h-full">
-            <Pie {...config2} />
+            {status === "succeeded" ? (
+              <Pie {...config2} />
+            ) : (
+              <Spin
+                size="large"
+                className="absolute top-1/2 h-screen w-screen flex justify-center"
+              />
+            )}
           </div>
         </div>
       </div>
