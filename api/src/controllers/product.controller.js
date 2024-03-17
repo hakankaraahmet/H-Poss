@@ -13,12 +13,21 @@ module.exports = {
     });
   },
   create: async (req, res) => {
-    const data = await Product.create(req.body);
-    res.status(201).send({
-      error: false,
-      message: "CREATED",
-      data,
-    });
+    const { title } = req.body;
+    const existingTitle = await Product.findOne({ title });
+    if (existingTitle) {
+      res.status(409).send({
+        error: false,
+        message: "This Product name is already used :(",
+      });
+    } else {
+      const data = await Product.create(req.body);
+      res.status(201).send({
+        error: false,
+        message: "CREATED",
+        data,
+      });
+    }
   },
   read: async (req, res) => {
     // const data = await Product.findOne({ _id: req.params.id }).populate(["categoryId","userId"]); // ALERT burasi userId olunca eklenecek
@@ -31,15 +40,24 @@ module.exports = {
     });
   },
   update: async (req, res) => {
-    const data = await Product.updateOne({ _id: req.params.id }, req.body, {
-      runValidators: true,
-    });
-    res.status(202).send({
-      error: false,
-      message: "UPDATED",
-      data,
-      new: await Product.findOne({ _id: req.params.id }),
-    });
+    const { title } = req.body;
+    const existingTitle = await Product.findOne({ title });
+    if (existingTitle) {
+      res.status(409).send({
+        error: false,
+        message: "This Product name is already used :(",
+      });
+    } else {
+      const data = await Product.updateOne({ _id: req.params.id }, req.body, {
+        runValidators: true,
+      });
+      res.status(202).send({
+        error: false,
+        message: "UPDATED",
+        data,
+        new: await Product.findOne({ _id: req.params.id }),
+      });
+    }
   },
   delete: async (req, res) => {
     const data = await Product.deleteOne({ _id: req.params.id });

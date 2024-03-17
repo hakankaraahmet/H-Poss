@@ -13,9 +13,8 @@ const Register = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-
   const onFinish = (values) => {
-    setLoading(true)
+    setLoading(true);
     dispatch(register(values));
   };
 
@@ -24,7 +23,7 @@ const Register = () => {
       message.success("User is created successfully");
       dispatch(resetStatus());
       form.resetFields();
-      setLoading(false)
+      setLoading(false);
       navigate("/login");
     } else if (status === "failed") {
       setShowError(true);
@@ -40,57 +39,55 @@ const Register = () => {
       <div className=" w-full md:w-1/3 flex flex-col h-full justify-center px-10 ">
         <div className=" mt-auto">
           <h1 className="text-center text-5xl font-bold mb-2">H-POS</h1>
-          {showError && <p>{error}</p>}
-          {!showError && (
-            <Form layout="vertical" onFinish={onFinish}>
-              <Form.Item
-                label="Please Enter Username"
-                name="username"
-                rules={[
-                  { required: true, message: "Username can't be empty!" },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Please Enter Email"
-                name="email"
-                rules={[{ required: true, message: "Email can't be empty!" }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Please Enter Password"
-                name="password"
-                rules={[
-                  { required: true, message: "Password can't be empty!" },
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-              <Form.Item
-                label="Please Enter Password Again"
-                dependencies={["password"]}
-                name="passwordAgain"
-                rules={[
-                  { required: true, message: "Password can't be empty!" },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue("password") === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error(
-                          "The new password that you entered do not match!"
-                        )
-                      );
-                    },
-                  }),
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-              <Form.Item>
+
+          <Form layout="vertical" onFinish={onFinish}>
+            <Form.Item
+              label="Please Enter Username"
+              name="username"
+              rules={[{ required: true, message: "Username can't be empty!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Please Enter Email"
+              name="email"
+              rules={[{ required: true, message: "Email can't be empty!" }]}
+            >
+              <Input type="email" />
+            </Form.Item>
+            <Form.Item
+              label="Please Enter Password"
+              name="password"
+              rules={[{ required: true, message: "Password can't be empty!" }]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item
+              label="Please Enter Password Again"
+              dependencies={["password"]}
+              name="passwordAgain"
+              rules={[
+                { required: true, message: "Password can't be empty!" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "The new password that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item>
+              {showError ? (
+                <p className="text-red-600 text-lg">{error}!!!</p>
+              ) : (
                 <Button
                   type="primary"
                   htmlType="submit"
@@ -100,9 +97,9 @@ const Register = () => {
                 >
                   Register
                 </Button>
-              </Form.Item>
-            </Form>
-          )}
+              )}
+            </Form.Item>
+          </Form>
         </div>
         <div className="mt-auto mb-4">
           Have you got already an account?{" "}

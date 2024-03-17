@@ -10,7 +10,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: [true, "username is required"],
-      unique: [true, " This username is already used"],
     },
     password: {
       type: String,
@@ -22,7 +21,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: [true, "Email is required"],
-      unique: [true, "This email is already used"],
       validate: [
         (email) => email.includes("@") && email.includes("."),
         "Email type is not correct",
