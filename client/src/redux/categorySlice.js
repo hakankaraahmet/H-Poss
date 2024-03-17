@@ -45,7 +45,7 @@ export const addCategory = createAsyncThunk(
       if (res.ok) {
         return data.data;
       } else {
-        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
     } catch (error) {
       throw new Error(error);
@@ -68,7 +68,7 @@ export const editCategory = createAsyncThunk(
       if (res.ok) {
         return data.data;
       } else {
-        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
     } catch (error) {
       throw new Error(error);
@@ -129,7 +129,7 @@ const categorySlice = createSlice({
       })
       .addCase(addCategory.rejected, (state, action) => {
         state.addingStatus = "failed";
-        state.addingError = action.error.message || "Unknown error";
+        state.addingError = action.payload || "Unknown error";
       })
       .addCase(editCategory.pending, (state) => {
         state.editStatus = "loading";
@@ -142,7 +142,7 @@ const categorySlice = createSlice({
       })
       .addCase(editCategory.rejected, (state, action) => {
         state.editStatus = "failed";
-        state.editError = action.error.message || "Unknown error";
+        state.editError = action.payload || "Unknown error";
       })
       .addCase(deleteCategory.pending, (state) => {
         state.deleteStatus = "loading";

@@ -42,7 +42,7 @@ export const addBill = createAsyncThunk(
       if (res.ok) {
         return data.data;
       } else {
-        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
     } catch (error) {
       throw new Error(error);
@@ -65,7 +65,7 @@ export const editBill = createAsyncThunk(
       if (res.ok) {
         return data.data;
       } else {
-        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
     } catch (error) {
       throw new Error(error);
@@ -112,7 +112,7 @@ const billSlice = createSlice({
       })
       .addCase(fetchBills.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message || "Unknown error";
+        state.error = action.payload || "Unknown error";
       })
       .addCase(addBill.pending, (state) => {
         state.addingStatus = "loading";
@@ -136,7 +136,7 @@ const billSlice = createSlice({
       })
       .addCase(editBill.rejected, (state, action) => {
         state.editStatus = "failed";
-        state.editError = action.error.message || "Unknown error";
+        state.editError = action.payload || "Unknown error";
       })
       .addCase(deleteBill.pending, (state) => {
         state.deleteStatus = "loading";

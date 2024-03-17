@@ -24,7 +24,8 @@ export const register = createAsyncThunk(
       if (res.ok) {
         return data.user;
       } else {
-        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        console.log('data :>> ', data);
+        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
     } catch (error) {
       throw new Error(error);
@@ -66,7 +67,7 @@ export const login = createAsyncThunk(
         }
         // ---------
       } else {
-        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error");
       }
     } catch (error) {
       throw new Error(error);
@@ -93,7 +94,7 @@ const userSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message || "Unknown error";
+        state.error = action.payload || "Unknown error";
       })
       .addCase(login.pending, (state) => {
         state.status = "loading";
@@ -104,7 +105,7 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message || "Unknown error";
+        state.error = action.payload || "Unknown error";
       });
   },
 });

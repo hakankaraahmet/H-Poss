@@ -42,7 +42,7 @@ export const addProduct = createAsyncThunk(
       if (res.ok) {
         return data.data;
       } else {
-        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
     } catch (error) {
       throw new Error(error);
@@ -65,7 +65,7 @@ export const editProduct = createAsyncThunk(
       if (res.ok) {
         return data.data;
       } else {
-        return rejectWithValue(data.error.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
       }
     } catch (error) {
       throw new Error(error);
@@ -126,7 +126,7 @@ const productSlice = createSlice({
       })
       .addCase(addProduct.rejected, (state, action) => {
         state.addingStatus = "failed";
-        state.addingError = action.error.message || "Unknown error";
+        state.addingError = action.payload || "Unknown error";
       })
       .addCase(editProduct.pending, (state) => {
         state.editStatus = "loading";
@@ -139,7 +139,7 @@ const productSlice = createSlice({
       })
       .addCase(editProduct.rejected, (state, action) => {
         state.editStatus = "failed";
-        state.editError = action.error.message || "Unknown error";
+        state.editError = action.payload || "Unknown error";
       })
       .addCase(deleteProduct.pending, (state) => {
         state.deleteStatus = "loading";
