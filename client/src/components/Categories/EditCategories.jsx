@@ -47,6 +47,7 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
       title: "Category Title",
       dataIndex: "title",
       key: "title",
+      width: 150,
       render: (_, record) => {
         return record._id === editingRow._id ? (
           <Form.Item className="mb-0" name="title">
@@ -61,16 +62,24 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
       title: "Action",
       dataIndex: "action",
       key: "action",
+      width: 250,
       render: (_, record) => {
+        const isEditing = record._id === editingRow._id;
         return (
-          <Form.Item className="mb-0">
-            <Button type="link" onClick={() => setEditingRow(record)}>
+          <Form.Item className="mb-0 ">
+            <Button type="text" onClick={() => setEditingRow(record)}>
               Edit
             </Button>
-            <Button type="text" htmlType="submit">
-              Save
-            </Button>
-            <Button type="text" danger onClick={() => onDelete(record._id)}>
+            {isEditing ? (
+              <Button type="text" className="ml-4" htmlType="submit">
+                Save
+              </Button>
+            ) : (
+              <Button type="text" className="ml-4" disabled>
+                Save
+              </Button>
+            )}
+            <Button type="primary" className="ml-4" danger onClick={() => onDelete(record._id)}>
               Delete
             </Button>
           </Form.Item>
@@ -99,7 +108,7 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
           columns={columns}
           rowKey={"_id"}
           bordered
-          scroll={{ x: 1000, y: 600 }}
+          scroll={{ x: 400, y: 600 }}
         />
       </Form>
     </Modal>
