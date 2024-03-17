@@ -19,13 +19,19 @@ const Products = () => {
     <div className="products-wrapper grid gap-4 grid-cols-card">
       {status === "loading" ? (
         <p>Products are loading...</p>
+      ) : products.length === 0 ? (
+        <p className="text-lg text-[#40a9ff] capitalize">
+          There is no product. Please add some...
+        </p>
       ) : (
         products.map((product) => (
           <ProductItem key={product._id} product={product} />
         ))
       )}
       <div
-        onClick={() => {setIsAddModalOpen(true)}}
+        onClick={() => {
+          setIsAddModalOpen(true);
+        }}
         className=" product-item add-item flex justify-center items-center border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none in-h-[180px]"
       >
         <PlusOutlined className="md:text-3xl text-white " />

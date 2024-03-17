@@ -20,7 +20,7 @@ const Categories = () => {
     <ul className="flex md:flex-col gap-4  text-lg">
       {status === "loading" ? (
         <p>Categories are loading...</p>
-      ) : (
+      ) : (categories.length === 0 ? <p className="text-lg text-[#40a9ff] capitalize">There is no category. Please add some...</p>:
         categories.map((category) => (
           <li key={category._id} className="category-item">
             <span>{category.title}</span>
