@@ -1,0 +1,7 @@
+.link {
+
+}
+
+.link:hover .badge {
+    color: #40a9ff
+}

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Input, message } from "antd";
+import { Input, message } from "antd";
 import { useSelector } from "react-redux";
 import {
   ShoppingCartOutlined,
@@ -12,13 +12,13 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Badge } from "antd";
+import "./style.css";
 const Header = () => {
+  const [activeRoute, setActiveRoute] = useState("/");
   const { cartItems } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = sessionStorage.getItem("userToken");
-
-  console.log("token :>> ", token);
   const requestOptions = {
     method: "GET",
     headers: {
@@ -47,7 +47,7 @@ const Header = () => {
       id: 0,
       name: "Home",
       link: "/",
-      icon: <HomeOutlined className="text-xl md:text-2xl" />,
+      icon: <HomeOutlined className={`text-xl md:text-2xl  `} />,
     },
     {
       id: 1,
@@ -55,8 +55,11 @@ const Header = () => {
       link: "/cart",
       badge: true,
       icon: (
-        <Badge count={cartItems.length}>
-          <ShoppingCartOutlined className="text-xl md:text-2xl" />
+        <Badge
+          count={cartItems.length}
+          className={` ${activeRoute === "/cart" && "text-[#40a9ff]"} badge`}
+        >
+          <ShoppingCartOutlined className={`text-xl md:text-2xl`} />
         </Badge>
       ),
     },
@@ -64,21 +67,23 @@ const Header = () => {
       id: 2,
       name: "Bills",
       link: "/bills",
-      icon: <CopyOutlined className="text-xl md:text-2xl" />,
+      icon: <CopyOutlined className={`text-xl md:text-2xl  `} />,
     },
     {
       id: 3,
       name: "Customers",
       link: "/customers",
-      icon: <UserOutlined className="text-xl md:text-2xl" />,
+      icon: <UserOutlined className={`text-xl md:text-2xl  `} />,
     },
     {
       id: 4,
       name: "Statistics",
       link: "/statistics",
-      icon: <BarChartOutlined className="text-xl md:text-2xl" />,
+      icon: <BarChartOutlined className={`text-xl md:text-2xl  `} />,
     },
   ];
+
+  console.log("activeRoute :>> ", activeRoute);
 
   return (
     <div className="border-2 mb-6">
@@ -103,10 +108,11 @@ const Header = () => {
           {navItems.map((navItem) => (
             <Link
               to={navItem.link}
-              className={`flex flex-col items-center hover:text-[#40a9ff] transition-all ${
+              className={`link flex flex-col items-center hover:text-[#40a9ff] transition-all ${
                 navItem.badge && "hidden md:flex"
-              }`}
+              } ${navItem.link === activeRoute && "text-[#40a9ff]"}`}
               key={navItem.id}
+              onClick={() => setActiveRoute(navItem.link)}
             >
               {navItem.icon}
               <span className="md:text-xs text-[10px] mt-1">
@@ -123,10 +129,16 @@ const Header = () => {
           </div>
         </div>
         <Link
-          to="/"
-          className={`flex flex-col items-center hover:text-[#40a9ff] transition-all md:hidden`}
+          to="/cart"
+          className={`link flex flex-col items-center hover:text-[#40a9ff] transition-all md:hidden ${
+            activeRoute === "/cart" && "text-[#40a9ff]"
+          }`}
+          onClick={() => setActiveRoute("/cart")}
         >
-          <Badge count={cartItems.length}>
+          <Badge
+            count={cartItems.length}
+            className={` ${activeRoute === "/cart" && "text-[#40a9ff]"} badge`}
+          >
             <ShoppingCartOutlined className="text-2xl" />
           </Badge>
           <span className="text-xs ">Cart</span>
