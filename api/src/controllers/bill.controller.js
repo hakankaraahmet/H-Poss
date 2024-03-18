@@ -4,8 +4,7 @@ const Bill = require("../models/bill.model");
 
 module.exports = {
   list: async (req, res) => {
-    // const data = await res.getModelList(Bill, {}, "userId"); // ALERT burasi userId olunca eklenecek
-    const data = await res.getModelList(Bill); 
+    const data = await res.getModelList(Bill, {}, "userId");
     res.status(200).send({
       error: false,
       details: await res.getModelListDetails(Bill),
@@ -21,8 +20,7 @@ module.exports = {
     });
   },
   read: async (req, res) => {
-    // const data = await Bill.findOne({ _id: req.params.id }).populate("userId"); // ALERT burasi userId olunca eklenecek
-    const data = await Bill.findOne({ _id: req.params.id }); 
+    const data = await Bill.findOne({ _id: req.params.id }).populate("userId");
     res.status(200).send({
       error: false,
       data,

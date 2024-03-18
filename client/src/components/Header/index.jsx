@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, message } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ShoppingCartOutlined,
   HomeOutlined,
@@ -12,6 +12,7 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Badge } from "antd";
+import {  resetStatus } from "../../redux/userSlice";
 import "./style.css";
 const Header = () => {
   const [activeRoute, setActiveRoute] = useState("/");
@@ -19,6 +20,7 @@ const Header = () => {
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = sessionStorage.getItem("userToken");
+  const dispatch = useDispatch()
   const requestOptions = {
     method: "GET",
     headers: {
@@ -30,6 +32,7 @@ const Header = () => {
   const handleLogout = async () => {
     if (window.confirm("Are you sure to Logout?")) {
       sessionStorage.removeItem("userToken");
+      dispatch(resetStatus());
       navigate("/login");
       message.success("Successfully logged out");
       try {
@@ -83,7 +86,6 @@ const Header = () => {
     },
   ];
 
-  console.log("activeRoute :>> ", activeRoute);
 
   return (
     <div className="border-2 mb-6">

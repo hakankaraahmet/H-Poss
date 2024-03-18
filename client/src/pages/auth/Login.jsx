@@ -7,13 +7,13 @@ import { login, resetStatus } from "../../redux/userSlice";
 import{ Loading} from "../../components/Common/Loading";
 
 const Login = () => {
-  const { status, error } = useSelector((state) => state.user);
+  const { user, status, error } = useSelector((state) => state.user);
   const [showError, setShowError] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-
+console.log('user :>> ', user);
   const onFinish = (values) => {
     setLoading(true);
     dispatch(login(values));

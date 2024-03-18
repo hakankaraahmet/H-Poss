@@ -9,6 +9,20 @@ const initialState = {
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
+export const fetchUser = createAsyncThunk(
+  "user/fetchUser",
+  async ({token}) => {
+    try {
+      const res = await fetch(`${baseUrl}/tokens`);
+      const data = await res.json();
+      const currentUser = data.data.find((item) => item.token === token)
+      return currentUser;
+    } catch (error) {
+      throw new Error("Failed to fetch User from the API.");
+    }
+  }
+);
+
 export const register = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
@@ -58,7 +72,7 @@ export const login = createAsyncThunk(
           );
           if (isUserValid) {
             sessionStorage.setItem("userToken", exactUser.token);
-            return data.data;
+            return data;
           } else {
             throw new Error("User is not valid");
           }
@@ -85,6 +99,17 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+    .addCase(fetchUser.pending, (state) => {
+      state.status = "loading";
+    })
+    .addCase(fetchUser.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.user = action.payload;
+    })
+    .addCase(fetchUser.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.payload || "Unknown error";
+    })
       .addCase(register.pending, (state) => {
         state.status = "loading";
       })

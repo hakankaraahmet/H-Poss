@@ -9,11 +9,11 @@ const CategorySchema = new mongoose.Schema(
       required: [true, "title is required"],
       unique: true,
     },
-    // userId: { //ALERT User id olayi eklenecek
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "users",
-    //   required: true,
-    // },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
   },
   { collection: "categories", timestamps: true }
 );

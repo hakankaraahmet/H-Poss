@@ -5,6 +5,7 @@ import { addBill, resetAddStatus } from "../../redux/billSlice";
 import { resetCart } from "../../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../Common/Loading";
+import { fetchUser } from "../../redux/userSlice";
 
 const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
   const [showError, setShowError] = useState(false);
@@ -12,10 +13,16 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
   const { bills, addingStatus, addingError } = useSelector(
     (state) => state.bills
   );
+  const { user } = useSelector((state) => state.user);
+  const userToken = sessionStorage.getItem("userToken");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const taxAmount = (total * tax) / 100;
+
+  useEffect(() => {
+    dispatch(fetchUser({token: userToken}))
+  },[])
 
   const onFinish = (values) => {
     dispatch(
@@ -25,6 +32,7 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
         tax: taxAmount.toFixed(2),
         totalAmount: (total + taxAmount).toFixed(2),
         cartItems: cartItems,
+        userId: user?._id
       })
     );
   };

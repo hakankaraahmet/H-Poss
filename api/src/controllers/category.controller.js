@@ -4,8 +4,7 @@ const Category = require("../models/category.model");
 
 module.exports = {
   list: async (req, res) => {
-    // const data = await res.getModelList(Category, {}, "userId"); // ALERT burasi userId olunca eklenecek
-    const data = await res.getModelList(Category);
+    const data = await res.getModelList(Category, {}, "userId");
     res.status(200).send({
       error: false,
       details: await res.getModelListDetails(Category),
@@ -30,8 +29,9 @@ module.exports = {
     }
   },
   read: async (req, res) => {
-    // const data = await Category.findOne({ _id: req.params.id }).populate("userId"); // ALERT burasi userId olunca eklenecek
-    const data = await Category.findOne({ _id: req.params.id });
+    const data = await Category.findOne({ _id: req.params.id }).populate(
+      "userId"
+    );
     res.status(200).send({
       error: false,
       data,

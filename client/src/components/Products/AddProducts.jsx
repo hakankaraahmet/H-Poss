@@ -3,20 +3,27 @@ import { Button, Form, Input, Modal, message, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, resetAddStatus } from "../../redux/productSlice";
 import { Loading } from "../Common/Loading";
+import { fetchUser } from "../../redux/userSlice";
 
 const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
   const [showError, setShowError] = useState(false);
   const { addingStatus, addingError } = useSelector((state) => state.products);
   const { categories } = useSelector((state) => state.categories);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const userToken = sessionStorage.getItem("userToken");
+
+  useEffect(() => {
+    dispatch(fetchUser({token: userToken}))
+  },[])
+
 
   const onFinish = (values) => {
-    console.log("values :>> ", values);
     const selectedCategory = categories.find(
       (item) => item._id === values.categoryId
     );
-    dispatch(addProduct({ ...values, categoryId: selectedCategory._id }));
+    dispatch(addProduct({ ...values, categoryId: selectedCategory._id, userId: user?._id }));
     form.resetFields();
   };
 

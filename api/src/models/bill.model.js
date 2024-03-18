@@ -33,11 +33,11 @@ const BillSchema = new mongoose.Schema(
       type: Array,
       required: [true, "Cart items is required"],
     },
-    // userId: { //ALERT User id olayi eklenecek
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "users",
-    //   required: true,
-    // },
+     userId: { 
+       type: mongoose.Schema.Types.ObjectId,
+       ref: "users",
+       required: true,
+     },
   },
   { collection: "bills", timestamps: true }
 );

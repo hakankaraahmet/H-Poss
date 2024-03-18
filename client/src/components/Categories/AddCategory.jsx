@@ -4,19 +4,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCategory, resetAddStatus } from "../../redux/categorySlice";
 import { message } from "antd";
 import { Loading } from "../Common/Loading";
+import { fetchUser } from "../../redux/userSlice";
 
 const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
   const [showError, setShowError] = useState(false);
-  const { addingStatus, addingError, categories } = useSelector(
+  const { user } = useSelector((state) => state.user);
+  const { addingStatus, addingError } = useSelector(
     (state) => state.categories
   );
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const userToken = sessionStorage.getItem("userToken");
 
   const onFinish = (values) => {
-    dispatch(addCategory(values));
+    dispatch(addCategory({title: values.title, userId: user?._id }));
     form.resetFields();
   };
+  useEffect(() => {
+    dispatch(fetchUser({token: userToken}))
+  },[])
 
   useEffect(() => {
     if (addingStatus === "succeeded") {
