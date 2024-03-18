@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addBill, resetAddStatus } from "../../redux/billSlice";
 import { resetCart } from "../../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../Common/Loading";
 
 const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
   const [showError, setShowError] = useState(false);
@@ -39,7 +40,7 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
     } else if (addingStatus === "failed") {
       setShowError(true);
       setTimeout(() => {
-        setShowError(false); // ALERT buraya bir donen circle koyacagim
+        setShowError(false); 
       }, 1500);
     }
   }, [addingStatus]);
@@ -52,7 +53,11 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
       footer={false}
       onCancel={() => setIsModalOpen(false)}
     >
-      {showError && <p>{addingError}</p>}
+    {showError && (
+      <div className="flex items-center gap-x-3">
+        <span>{addingError}</span> <Loading />
+      </div>
+    )}
       {!showError && (
         <Form layout="vertical" onFinish={onFinish}>
           <Form.Item

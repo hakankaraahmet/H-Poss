@@ -8,10 +8,10 @@ import {
   resetDeleteStatus,
   resetEditStatus
 } from "../../redux/productSlice";
+import { Loading } from "../Common/Loading";
 import { fetchCategories } from "../../redux/categorySlice";
 const EditProducts = () => {
   const [editingItem, setEditingItem] = useState({});
-  const [selectedItemCategory, setSelectedItemCategory] = useState('')
   const [form] = Form.useForm();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -131,7 +131,7 @@ const EditProducts = () => {
     } else if (editStatus === "failed") {
       setShowError(true);
       setTimeout(() => {
-        setShowError(false); // ALERT buraya bir donen circle koyacagim
+        setShowError(false); 
         form.resetFields();
       }, 1500);
     }
@@ -153,7 +153,11 @@ const EditProducts = () => {
         footer={false}
         onCancel={() => setIsEditModalOpen(false)}
       >
-        {showError && <p>{editError}</p>}
+      {showError && (
+        <div className="flex items-center gap-x-3">
+          <span>{addingError}</span> <Loading />
+        </div>
+      )}
         {!showError && (
           <Form
             layout="vertical"

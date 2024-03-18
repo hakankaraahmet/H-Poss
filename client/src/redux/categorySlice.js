@@ -45,7 +45,7 @@ export const addCategory = createAsyncThunk(
       if (res.ok) {
         return data.data;
       } else {
-        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error"); 
       }
     } catch (error) {
       throw new Error(error);
@@ -68,7 +68,7 @@ export const editCategory = createAsyncThunk(
       if (res.ok) {
         return data.data;
       } else {
-        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error");
       }
     } catch (error) {
       throw new Error(error);

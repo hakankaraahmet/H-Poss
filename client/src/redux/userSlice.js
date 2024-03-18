@@ -25,7 +25,7 @@ export const register = createAsyncThunk(
         return data.user;
       } else {
         console.log('data :>> ', data);
-        return rejectWithValue(data.message || "Unknown error"); // BURADA detayli hata mesaji almak istiyorum
+        return rejectWithValue(data.message || "Unknown error"); 
       }
     } catch (error) {
       throw new Error(error);

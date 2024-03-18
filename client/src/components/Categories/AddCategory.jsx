@@ -3,6 +3,7 @@ import { Button, Form, Input, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addCategory, resetAddStatus } from "../../redux/categorySlice";
 import { message } from "antd";
+import { Loading } from "../Common/Loading";
 
 const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
   const [showError, setShowError] = useState(false);
@@ -25,12 +26,11 @@ const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
     } else if (addingStatus === "failed") {
       setShowError(true);
       setTimeout(() => {
-        setShowError(false); // ALERT buraya bir donen circle koyacagim
+        setShowError(false);
         form.resetFields();
       }, 1500);
     }
   }, [addingStatus]);
-  
 
   return (
     <Modal
@@ -39,7 +39,11 @@ const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
       footer={false}
       onCancel={() => setIsAddModalOpen(false)}
     >
-      {showError && <p>{addingError}</p>}
+      {showError && (
+        <div className="flex items-center gap-x-3">
+          <span>{addingError}</span> <Loading />
+        </div>
+      )}
       {!showError && (
         <Form layout="vertical" onFinish={onFinish} form={form}>
           <Form.Item

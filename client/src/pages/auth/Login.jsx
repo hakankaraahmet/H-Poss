@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthCarousel from "../../components/Auth/AuthCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import { login, resetStatus } from "../../redux/userSlice";
+import{ Loading} from "../../components/Common/Loading";
 
 const Login = () => {
   const { status, error } = useSelector((state) => state.user);
@@ -27,7 +28,7 @@ const Login = () => {
     } else if (status === "failed") {
       setShowError(true);
       setTimeout(() => {
-        setShowError(false); // ALERT buraya bir donen circle koyacagim
+        setShowError(false);
         setLoading(false);
         dispatch(resetStatus());
       }, 1500);
@@ -65,10 +66,13 @@ const Login = () => {
                 <Link>Forgot Password?</Link>
               </div>
             </Form.Item>
-           
-              <Form.Item>
+
+            <Form.Item>
               {showError ? (
-                <p className="text-red-600 text-lg">{error}!!!</p>
+                <div className="flex  items-center gap-x-3">
+                  <p className="text-red-400 text-lg">{error}!!!</p>
+                  <Loading danger/>
+                </div>
               ) : (
                 <Button
                   type="primary"
@@ -79,8 +83,8 @@ const Login = () => {
                 >
                   Login
                 </Button>
-                )}
-              </Form.Item>
+              )}
+            </Form.Item>
           </Form>
         </div>
         <div className="mt-auto mb-4">
