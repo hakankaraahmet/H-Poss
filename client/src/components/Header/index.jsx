@@ -98,15 +98,17 @@ const Header = () => {
           </Link>
         </div>
         <div className="header-search flex-1 justify-center">
-          <Input
-            size="large"
-            placeholder="Find Product"
-            prefix={<SearchOutlined />}
-            className="rounded-full max-w-[800px]"
-            onChange={(e) =>
-              dispatch(addProductSearch(e.target.value.toLowerCase()))
-            }
-          />
+          {location.pathname === "/" && (
+            <Input
+              size="large"
+              placeholder="Find Product"
+              prefix={<SearchOutlined />}
+              className="rounded-full max-w-[800px]"
+              onChange={(e) =>
+                dispatch(addProductSearch(e.target.value.toLowerCase()))
+              }
+            />
+          )}
         </div>
         <div
           className={`menu-links flex justify-between items-center gap-7 md:static  bottom-0 w-screen bg-white

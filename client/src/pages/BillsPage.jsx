@@ -82,7 +82,7 @@ const BillsPage = () => {
   return (
     <div className="px-6">
       <h1 className="text-4xl font-bold text-center mb-4">Bills</h1>
-      <Table dataSource={bills} columns={columns} bordered pagination={false} />
+      <Table dataSource={bills} columns={columns} bordered pagination={false} rowKey={"_id"} />
 
       <PrintBill
         isModalOpen={isModalOpen}
