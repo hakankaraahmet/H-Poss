@@ -3,9 +3,12 @@ import { Table, Card, Button } from "antd";
 import PrintBill from "../components/Bills/PrintBill";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBills } from "../redux/billSlice";
+import { getColumnSearchProps } from "../lib/tableSorter";
 
 const BillsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
   const { bills, status } = useSelector((state) => state.bills);
   const [customer, setCustomer] = useState({});
   const dispatch = useDispatch();
@@ -18,11 +21,25 @@ const BillsPage = () => {
       title: "Customer Name",
       dataIndex: "customerName",
       key: "customerName",
+      ...getColumnSearchProps(
+        "customerName",
+        searchText,
+        setSearchText,
+        searchedColumn,
+        setSearchedColumn
+      ),
     },
     {
       title: "Customer PhoneNumber",
       dataIndex: "customerPhoneNumber",
       key: "customerPhoneNumber",
+      ...getColumnSearchProps(
+        "customerPhoneNumber",
+        searchText,
+        setSearchText,
+        searchedColumn,
+        setSearchedColumn
+      ),
     },
     {
       title: "Creation Date",
@@ -34,12 +51,15 @@ const BillsPage = () => {
       title: "Payment Method",
       dataIndex: "paymentMethod",
       key: "paymentMethod",
+      sorter: (a, b) => a.paymentMethod.length - b.paymentMethod.length,
+      
     },
     {
       title: "Total Amount",
       dataIndex: "totalAmount",
       key: "totalAmount",
       render: (_, record) => <span>{record.totalAmount.toFixed(2)} $</span>,
+      sorter: (a, b) => a.totalAmount - b.totalAmount,
     },
     {
       title: "Actions",

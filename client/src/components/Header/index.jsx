@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Input, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,13 +16,12 @@ import { resetStatus } from "../../redux/userSlice";
 import "./style.css";
 import { addProductSearch } from "../../redux/appSlice";
 const Header = () => {
-  const [activeRoute, setActiveRoute] = useState("/");
   const { cartItems } = useSelector((state) => state.cart);
-  const { filteredCategory, productSearch } = useSelector((state) => state.app);
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = sessionStorage.getItem("userToken");
   const dispatch = useDispatch();
+  const location = useLocation();
   const requestOptions = {
     method: "GET",
     headers: {
@@ -62,7 +61,9 @@ const Header = () => {
       icon: (
         <Badge
           count={cartItems.length}
-          className={` ${activeRoute === "/cart" && "text-[#40a9ff]"} badge`}
+          className={` ${
+            location.pathname === "/cart" && "text-[#40a9ff]"
+          } badge`}
         >
           <ShoppingCartOutlined className={`text-xl md:text-2xl`} />
         </Badge>
@@ -88,8 +89,6 @@ const Header = () => {
     },
   ];
 
-
-
   return (
     <div className="border-2 mb-6">
       <header className="header py-4 px-6 flex justify-between items-center gap-10 3xl:w-2/3 3xl:mx-auto">
@@ -104,7 +103,9 @@ const Header = () => {
             placeholder="Find Product"
             prefix={<SearchOutlined />}
             className="rounded-full max-w-[800px]"
-            onChange={(e) => dispatch(addProductSearch(e.target.value.toLowerCase()))}
+            onChange={(e) =>
+              dispatch(addProductSearch(e.target.value.toLowerCase()))
+            }
           />
         </div>
         <div
@@ -116,9 +117,8 @@ const Header = () => {
               to={navItem.link}
               className={`link flex flex-col items-center hover:text-[#40a9ff] transition-all ${
                 navItem.badge && "hidden md:flex"
-              } ${navItem.link === activeRoute && "text-[#40a9ff]"}`}
+              } ${navItem.link === location.pathname && "text-[#40a9ff]"}`}
               key={navItem.id}
-              onClick={() => setActiveRoute(navItem.link)}
             >
               {navItem.icon}
               <span className="md:text-xs text-[10px] mt-1">
@@ -137,13 +137,14 @@ const Header = () => {
         <Link
           to="/cart"
           className={`link flex flex-col items-center hover:text-[#40a9ff] transition-all md:hidden ${
-            activeRoute === "/cart" && "text-[#40a9ff]"
+            location.pathname === "/cart" && "text-[#40a9ff]"
           }`}
-          onClick={() => setActiveRoute("/cart")}
         >
           <Badge
             count={cartItems.length}
-            className={` ${activeRoute === "/cart" && "text-[#40a9ff]"} badge`}
+            className={` ${
+              location.pathname === "/cart" && "text-[#40a9ff]"
+            } badge`}
           >
             <ShoppingCartOutlined className="text-2xl" />
           </Badge>

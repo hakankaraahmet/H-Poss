@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { Table, Card, Button, message, Popconfirm } from "antd";
+import { Table, Card, Button, message, Popconfirm,} from "antd";
 import CreateBill from "../components/Carts/CreateBill";
 import { useDispatch, useSelector } from "react-redux";
 import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { deleteCart, increaseCart, reduceCart } from "../redux/cartSlice";
+import { getColumnSearchProps } from "../lib/tableSorter";
 
 const CartPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
   const { cartItems, total, tax } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const taxAmount = (total * tax) / 100;
@@ -40,18 +43,28 @@ const CartPage = () => {
       title: "Product Name",
       dataIndex: "title",
       key: "title",
+      ...getColumnSearchProps(
+        "title",
+        searchText,
+        setSearchText,
+        searchedColumn,
+        setSearchedColumn
+      ),
     },
     {
       title: "Category",
       dataIndex: "categoryId",
       render: (_, record) => {
-        return <p>{record.categoryId.title}</p>;
+        return (
+          <p>{record.categoryId.title}</p>
+        );
       },
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      sorter: (a, b) => a.price - b.price,
       render: (_, record) => {
         return <p>{record.price.toFixed(2)} $</p>;
       },

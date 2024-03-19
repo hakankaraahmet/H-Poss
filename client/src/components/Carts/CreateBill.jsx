@@ -53,7 +53,6 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
     }
   }, [addingStatus]);
 
-  console.log("bills :>> ", bills);
   return (
     <Modal
       title="Create Bill"
