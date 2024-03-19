@@ -9,12 +9,12 @@ import { Link } from "react-router-dom";
 const Products = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { products, status } = useSelector((state) => state.products);
+  const { filteredCategory, productSearch } = useSelector((state) => state.app);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
-
   return (
     <div className="products-wrapper grid gap-4 grid-cols-card">
       {status === "loading" ? (
@@ -23,10 +23,23 @@ const Products = () => {
         <p className="text-lg text-[#40a9ff] capitalize">
           There is no product. Please add some...
         </p>
+      ) : filteredCategory ? (
+        products
+          .filter((product) =>
+            product.title.toLowerCase().includes(productSearch)
+          )
+          .flatMap(
+            (product) =>
+              product.categoryId._id === filteredCategory && (
+                <ProductItem key={product._id} product={product} />
+              )
+          )
       ) : (
-        products.map((product) => (
-          <ProductItem key={product._id} product={product} />
-        ))
+        products
+          .filter((product) =>
+            product.title.toLowerCase().includes(productSearch)
+          )
+          .map((product) => <ProductItem key={product._id} product={product} />)
       )}
       <div
         onClick={() => {

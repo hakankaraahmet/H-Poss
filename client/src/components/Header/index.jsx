@@ -12,15 +12,17 @@ import {
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Badge } from "antd";
-import {  resetStatus } from "../../redux/userSlice";
+import { resetStatus } from "../../redux/userSlice";
 import "./style.css";
+import { addProductSearch } from "../../redux/appSlice";
 const Header = () => {
   const [activeRoute, setActiveRoute] = useState("/");
   const { cartItems } = useSelector((state) => state.cart);
+  const { filteredCategory, productSearch } = useSelector((state) => state.app);
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = sessionStorage.getItem("userToken");
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const requestOptions = {
     method: "GET",
     headers: {
@@ -87,6 +89,7 @@ const Header = () => {
   ];
 
 
+
   return (
     <div className="border-2 mb-6">
       <header className="header py-4 px-6 flex justify-between items-center gap-10 3xl:w-2/3 3xl:mx-auto">
@@ -101,6 +104,7 @@ const Header = () => {
             placeholder="Find Product"
             prefix={<SearchOutlined />}
             className="rounded-full max-w-[800px]"
+            onChange={(e) => dispatch(addProductSearch(e.target.value.toLowerCase()))}
           />
         </div>
         <div

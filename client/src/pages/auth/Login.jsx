@@ -13,7 +13,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-console.log('user :>> ', user);
   const onFinish = (values) => {
     setLoading(true);
     dispatch(login(values));

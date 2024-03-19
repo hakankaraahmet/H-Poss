@@ -5,8 +5,10 @@ import { PlusOutlined, EditOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../redux/categorySlice.js";
 import "../style.css";
+import { addFilteredCategory, resetFilteredCategory } from "../../redux/appSlice";
 const Categories = () => {
   const { categories, status } = useSelector((state) => state.categories);
+  const { filteredCategory } = useSelector((state) => state.app);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const dispatch = useDispatch();
@@ -15,17 +17,37 @@ const Categories = () => {
     dispatch(fetchCategories());
   }, []);
 
-
   return (
     <ul className="flex md:flex-col gap-4  text-lg">
       {status === "loading" ? (
         <p>Categories are loading...</p>
-      ) : (categories.length === 0 ? <p className="text-lg text-[#40a9ff] capitalize">There is no category. Please add some...</p>:
-        categories.map((category) => (
-          <li key={category._id} className="category-item">
-            <span>{category.title}</span>
-          </li>
-        ))
+      ) : categories.length === 0 ? (
+        <p className="text-lg text-[#40a9ff] capitalize">
+          There is no category. Please add some...
+        </p>
+      ) : (
+        <>
+          {filteredCategory !== "" && (
+            <li
+              className={`rounded-xl bg-blue-400 w-full text-center cursor-pointer p-3 text-white hover:bg-blue-600 `}
+              onClick={() => dispatch(resetFilteredCategory())}
+            >
+              <span>See All Products</span>
+            </li>
+          )}
+          {categories.map((category) => (
+            <li
+              key={category._id}
+              className={`category-item ${
+                category._id === filteredCategory &&
+                "bg-gradient-to-r from-green-600 to-green-800"
+              }`}
+              onClick={() => dispatch(addFilteredCategory(category._id))}
+            >
+              <span>{category.title}</span>
+            </li>
+          ))}
+        </>
       )}
       <li
         className="category-item add-item"

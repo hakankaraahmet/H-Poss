@@ -4,6 +4,7 @@ import productSlice from "./productSlice";
 import cartSlice from "./cartSlice";
 import billSlice from "./billSlice";
 import userSlice from "./userSlice";
+import appSlice from "./appSlice";
 export default configureStore({
   reducer: {
     categories: categorySlice,
@@ -11,5 +12,6 @@ export default configureStore({
     bills: billSlice,
     cart: cartSlice,
     user: userSlice,
+    app: appSlice,
   },
 });

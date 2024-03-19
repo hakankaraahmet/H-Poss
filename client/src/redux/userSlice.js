@@ -38,7 +38,6 @@ export const register = createAsyncThunk(
       if (res.ok) {
         return data.user;
       } else {
-        console.log('data :>> ', data);
         return rejectWithValue(data.message || "Unknown error"); 
       }
     } catch (error) {
