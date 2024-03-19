@@ -1,15 +1,19 @@
-import {  useEffect } from "react";
+import { useEffect, useState } from "react";
 import StatisticCards from "../components/Statistics/StatisticCards";
 import { Spin } from "antd";
 import { Area, Pie } from "@ant-design/plots";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBills } from "../redux/billSlice";
 import { fetchProducts } from "../redux/productSlice";
+import { fetchUser } from "../redux/userSlice";
 const StatisticPage = () => {
+  const [userName, setUserName] = useState("");
   const { products } = useSelector((state) => state.products);
   const { bills, status } = useSelector((state) => state.bills);
+  const { user } = useSelector((state) => state.user);
+  const userToken = sessionStorage.getItem("userToken");
   const dispatch = useDispatch();
-
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   useEffect(() => {
     dispatch(fetchBills());
     dispatch(fetchProducts());
@@ -98,6 +102,24 @@ const StatisticPage = () => {
       image: "/product.svg",
     },
   ];
+
+  useEffect(() => {
+    dispatch(fetchUser({ token: userToken }));
+  }, []);
+
+  useEffect(() => {
+    async function fetchUserName() {
+      try {
+        const res = await fetch(`${baseUrl}/users/${user?.userId}`);
+        const data = await res.json();
+        setUserName(data.data.username);
+      } catch (error) {
+        console.log("error :>> ", error);
+      }
+    }
+    fetchUserName();
+  }, [user]);
+
   return (
     <div className="px-6 pb-20">
       <h1 className="text-4xl font-bold text-center mb-4 select-none">
@@ -107,12 +129,12 @@ const StatisticPage = () => {
         <h2 className="text-lg">
           Welcome{" "}
           <span className="text-green-700 font-bold text-xl capitalize">
-            admin
+            {userName}
           </span>
         </h2>
         <div className="statistic-cards grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-4 gap-8 my-8 ">
           {statisticsCards.map((item) => (
-            <StatisticCards item={item} />
+            <StatisticCards item={item} key={item.id} />
           ))}
         </div>
         <div className="flex flex-col lg:flex-row gap-10 justify-between ">
