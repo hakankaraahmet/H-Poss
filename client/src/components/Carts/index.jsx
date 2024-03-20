@@ -12,11 +12,13 @@ import {
   reduceCart,
   resetCart,
 } from "../../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 const Carts = () => {
   const { cartItems, total, tax } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const taxAmount = (total * tax) / 100;
+  const navigate = useNavigate()
 
   const onDelete = (item) => {
     if (window.confirm("Are you sure to delete the product?")) {
@@ -48,10 +50,10 @@ const Carts = () => {
         Products in Carts
       </h2>
       <ul className="cart-items px-2 flex flex-col gap-y-3 pt-2 overflow-y-auto py-2">
-        {cartItems.length === 0 ? (
+        {cartItems?.length === 0 ? (
           <p>There is no product in the cart...</p>
         ) : (
-          cartItems.map((item) => (
+          cartItems?.map((item) => (
             <li key={item._id} className="cart-item flex justify-between ">
               <div className="flex items-center">
                 <img
@@ -115,7 +117,8 @@ const Carts = () => {
             type="primary"
             size="large"
             className="w-full "
-            disabled={cartItems.length === 0}
+            disabled={cartItems?.length === 0}
+            onClick={() => navigate('/cart')}
           >
             Create Order
           </Button>
@@ -126,7 +129,7 @@ const Carts = () => {
             danger
             icon={<ClearOutlined />}
             onClick={onReset}
-            disabled={cartItems.length === 0}
+            disabled={cartItems?.length === 0}
           >
             Clear
           </Button>

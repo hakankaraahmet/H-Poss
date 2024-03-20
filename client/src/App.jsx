@@ -9,11 +9,18 @@ import StatisticPage from "./pages/StatisticPage";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import ProductsPage from "./pages/ProductsPage";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function App() {
   const location = useLocation();
   const hideHeader = ["/register", "/login"].includes(location.pathname);
   const isLoggedIn = sessionStorage.getItem("userToken");
+  const cart  = useSelector((state) => state.cart);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   return (
     <>
@@ -53,7 +60,12 @@ function App() {
             path="/login"
             element={isLoggedIn ? <Navigate to="/" /> : <Login />}
           />
-          <Route path="*" element={isLoggedIn ? <Navigate to="/" /> : <Navigate to="/login" />} />
+          <Route
+            path="*"
+            element={
+              isLoggedIn ? <Navigate to="/" /> : <Navigate to="/login" />
+            }
+          />
         </Routes>
       </div>
     </>

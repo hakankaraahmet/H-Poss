@@ -60,7 +60,7 @@ const Header = () => {
       badge: true,
       icon: (
         <Badge
-          count={cartItems.length}
+          count={cartItems?.length}
           className={` ${
             location.pathname === "/cart" && "text-[#40a9ff]"
           } badge`}
@@ -143,7 +143,7 @@ const Header = () => {
           }`}
         >
           <Badge
-            count={cartItems.length}
+            count={cartItems?.length}
             className={` ${
               location.pathname === "/cart" && "text-[#40a9ff]"
             } badge`}
