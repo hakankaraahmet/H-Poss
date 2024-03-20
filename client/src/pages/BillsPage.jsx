@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Card, Button } from "antd";
+import { Table, Card, Button, Spin } from "antd";
 import PrintBill from "../components/Bills/PrintBill";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBills } from "../redux/billSlice";
@@ -52,7 +52,6 @@ const BillsPage = () => {
       dataIndex: "paymentMethod",
       key: "paymentMethod",
       sorter: (a, b) => a.paymentMethod.length - b.paymentMethod.length,
-      
     },
     {
       title: "Total Amount",
@@ -82,7 +81,17 @@ const BillsPage = () => {
   return (
     <div className="px-6">
       <h1 className="text-4xl font-bold text-center mb-4">Bills</h1>
-      <Table dataSource={bills} columns={columns} bordered pagination={false} rowKey={"_id"} />
+      {status === "loading" ? (
+        <Spin size="large" className="absolute w-full inset-x-0 mx-auto mt-10" />
+      ) : (
+        <Table
+          dataSource={bills}
+          columns={columns}
+          bordered
+          pagination={false}
+          rowKey={"_id"}
+        />
+      )}
 
       <PrintBill
         isModalOpen={isModalOpen}

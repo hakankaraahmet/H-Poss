@@ -6,6 +6,7 @@ import { fetchProducts } from "../../redux/productSlice";
 import "../style.css";
 import AddProduct from "./AddProducts";
 import { Link } from "react-router-dom";
+import { Spin } from "antd";
 const Products = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { products, status } = useSelector((state) => state.products);
@@ -16,9 +17,9 @@ const Products = () => {
     dispatch(fetchProducts());
   }, []);
   return (
-    <div className="products-wrapper grid gap-4 grid-cols-card">
+    <div className= {` ${status === "loading" ? 'flex justify-center items-center  lg:h-1/2' : 'products-wrapper grid gap-4 grid-cols-card  relative'}`}>
       {status === "loading" ? (
-        <p>Products are loading...</p>
+        <Spin size="large" className="mt-16 lg:mt-0"/>
       ) : products.length === 0 ? (
         <p className="text-lg text-[#40a9ff] capitalize">
           There is no product. Please add some...
@@ -41,20 +42,26 @@ const Products = () => {
           )
           .map((product) => <ProductItem key={product._id} product={product} />)
       )}
-      <div
-        onClick={() => {
-          setIsAddModalOpen(true);
-        }}
-        className=" product-item add-item flex justify-center items-center border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none in-h-[180px]"
-      >
-        <PlusOutlined className="md:text-3xl text-white " />
-      </div>
-      <Link
-        to={"/products"}
-        className=" product-item edit-item flex justify-center items-center border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none min-h-[180px]"
-      >
-        <EditOutlined className="md:text-3xl text-white " />
-      </Link>
+      {status !== "loading" && (
+        <>
+          {" "}
+          <div
+            onClick={() => {
+              setIsAddModalOpen(true);
+            }}
+            className=" product-item add-item flex justify-center items-center border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none in-h-[180px]"
+          >
+            <PlusOutlined className="md:text-3xl text-white " />
+          </div>
+          <Link
+            to={"/products"}
+            className=" product-item edit-item flex justify-center items-center border rounded-xl hover:shadow-xl cursor-pointer transition-all select-none min-h-[180px]"
+          >
+            <EditOutlined className="md:text-3xl text-white " />
+          </Link>
+        </>
+      )}
+
       <AddProduct
         isModalOpen={isAddModalOpen}
         setIsAddModalOpen={setIsAddModalOpen}

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import { Spin, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getColumnSearchProps } from "../lib/tableSorter";
 import { fetchBills } from "../redux/billSlice";
 
 const CustomersPage = () => {
-  const { bills } = useSelector((state) => state.bills);
+  const { bills, status } = useSelector((state) => state.bills);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const dispatch = useDispatch();
@@ -48,6 +48,9 @@ const CustomersPage = () => {
   return (
     <div className="px-6">
       <h1 className="text-4xl font-bold text-center mb-4">Customers</h1>
+      {status === "loading" ? (
+        <Spin size="large" className="absolute w-full inset-x-0 mx-auto mt-10" />
+      ) : (
       <Table
         dataSource={bills}
         columns={columns}
@@ -56,6 +59,7 @@ const CustomersPage = () => {
         scroll={{ x: 1000, y: 600 }}
         rowKey={"_id"}
       />
+      )}
     </div>
   );
 };

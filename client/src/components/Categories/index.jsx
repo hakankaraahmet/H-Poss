@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../redux/categorySlice.js";
 import "../style.css";
 import { addFilteredCategory, resetFilteredCategory } from "../../redux/appSlice";
+import { Spin } from "antd";
 const Categories = () => {
   const { categories, status } = useSelector((state) => state.categories);
   const { filteredCategory } = useSelector((state) => state.app);
@@ -18,9 +19,9 @@ const Categories = () => {
   }, []);
 
   return (
-    <ul className="flex md:flex-col gap-4  text-lg">
+    <ul className= {`md:flex-col gap-4  text-lg flex`}>
       {status === "loading" ? (
-        <p>Categories are loading...</p>
+        <Spin size="large" className=" p-10 lg:p-0"/>
       ) : categories.length === 0 ? (
         <p className="text-lg text-[#40a9ff] capitalize">
           There is no category. Please add some...

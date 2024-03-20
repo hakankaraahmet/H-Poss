@@ -138,7 +138,7 @@ const StatisticPage = () => {
           ))}
         </div>
         <div className="flex flex-col lg:flex-row gap-10 justify-between ">
-          <div className="lg:w-1/2 h-72 lg:h-1/2">
+          <div className="lg:w-1/2 h-72 lg:h-1/2 relative">
             {status === "succeeded" ? (
               <Area {...config} />
             ) : (
@@ -148,7 +148,7 @@ const StatisticPage = () => {
               />
             )}
           </div>
-          <div className="lg:w-1/2 h-72 lg:h-full">
+          <div className="lg:w-1/2 h-72 lg:h-full relative">
             {status === "succeeded" ? (
               <Pie {...config2} />
             ) : (
