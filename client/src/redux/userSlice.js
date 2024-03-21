@@ -1,10 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+
 const initialState = {
   user: null,
   token: "",
   status: "idle",
+  loginStatus: "idle",
   error: "",
+  loginError: ""
 };
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -58,6 +61,7 @@ export const login = createAsyncThunk(
         headers: { "Content-type": "application/json; charset=UTF-8" },
       });
       const data = await res.json();
+
       if (res.ok) {
         //TOKENS
         try {
@@ -70,7 +74,16 @@ export const login = createAsyncThunk(
             (item) => item.userId === data.user._id
           );
           if (isUserValid) {
-            sessionStorage.setItem("userToken", exactUser.token);
+            if (userData.remember) {
+            
+              localStorage.setItem("userToken", exactUser.token);
+            } else {
+           
+              localStorage.setItem("userToken", exactUser.token);
+              setTimeout(() => {
+                localStorage.removeItem("userToken");
+              }, 15000);
+            }
             return data;
           } else {
             throw new Error("User is not valid");
@@ -94,6 +107,7 @@ const userSlice = createSlice({
   reducers: {
     resetStatus: (state) => {
       state.status = "idle";
+      state.loginStatus= "idle"
     },
   },
   extraReducers: (builder) => {
@@ -121,15 +135,15 @@ const userSlice = createSlice({
         state.error = action.payload || "Unknown error";
       })
       .addCase(login.pending, (state) => {
-        state.status = "loading";
+        state.loginStatus = "loading";
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.loginStatus = "succeeded";
         state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload || "Unknown error";
+        state.loginStatus = "failed";
+        state.loginError = action.payload || "Unknown error";
       });
   },
 });

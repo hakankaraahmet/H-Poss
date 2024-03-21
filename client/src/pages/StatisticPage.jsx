@@ -11,7 +11,7 @@ const StatisticPage = () => {
   const { products } = useSelector((state) => state.products);
   const { bills, status } = useSelector((state) => state.bills);
   const { user } = useSelector((state) => state.user);
-  const userToken = sessionStorage.getItem("userToken");
+  const userToken = localStorage.getItem("userToken");
   const dispatch = useDispatch();
   const baseUrl = import.meta.env.VITE_BASE_URL;
   useEffect(() => {

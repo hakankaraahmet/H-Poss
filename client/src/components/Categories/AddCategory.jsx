@@ -14,7 +14,7 @@ const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
   );
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const userToken = sessionStorage.getItem("userToken");
+  const userToken = localStorage.getItem("userToken");
 
   const onFinish = (values) => {
     dispatch(addCategory({title: values.title, userId: user?._id }));

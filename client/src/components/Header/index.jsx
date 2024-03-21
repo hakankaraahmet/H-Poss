@@ -19,7 +19,7 @@ const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
-  const token = sessionStorage.getItem("userToken");
+  const token = localStorage.getItem("userToken");
   const dispatch = useDispatch();
   const location = useLocation();
   const requestOptions = {
@@ -32,7 +32,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     if (window.confirm("Are you sure to Logout?")) {
-      sessionStorage.removeItem("userToken");
+      localStorage.removeItem("userToken");
       dispatch(resetStatus());
       navigate("/login");
       message.success("Successfully logged out");

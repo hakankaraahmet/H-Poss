@@ -15,7 +15,7 @@ import { useEffect } from "react";
 function App() {
   const location = useLocation();
   const hideHeader = ["/register", "/login"].includes(location.pathname);
-  const isLoggedIn = sessionStorage.getItem("userToken");
+  const isLoggedIn = localStorage.getItem("userToken");
   const cart  = useSelector((state) => state.cart);
 
   useEffect(() => {

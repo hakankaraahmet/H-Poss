@@ -14,7 +14,7 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
     (state) => state.bills
   );
   const { user } = useSelector((state) => state.user);
-  const userToken = sessionStorage.getItem("userToken");
+  const userToken = localStorage.getItem("userToken");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();

@@ -12,7 +12,7 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const userToken = sessionStorage.getItem("userToken");
+  const userToken = localStorage.getItem("userToken");
 
   useEffect(() => {
     dispatch(fetchUser({token: userToken}))

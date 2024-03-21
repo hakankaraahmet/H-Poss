@@ -1,30 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import AuthCarousel from "../../components/Auth/AuthCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import { login, resetStatus } from "../../redux/userSlice";
-import{ Loading} from "../../components/Common/Loading";
+import { Loading } from "../../components/Common/Loading";
 
 const Login = () => {
-  const { user, status, error } = useSelector((state) => state.user);
+  const { loginStatus, loginError } = useSelector((state) => state.user);
   const [showError, setShowError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const onFinish = (values) => {
-    setLoading(true);
-    dispatch(login(values));
-  };
+
+
+  const onFinish = useCallback(
+    (values) => {
+      setLoading(true);
+      dispatch(login(values));
+    },
+    [isClicked]
+  );
+
+
   useEffect(() => {
-    if (status === "succeeded") {
+    if (loginStatus === "succeeded") {
       message.success("Login is successfull");
       dispatch(resetStatus());
       form.resetFields();
       setLoading(false);
       navigate("/");
-    } else if (status === "failed") {
+    } else if (loginStatus === "failed") {
       setShowError(true);
       setTimeout(() => {
         setShowError(false);
@@ -32,7 +40,7 @@ const Login = () => {
         dispatch(resetStatus());
       }, 1500);
     }
-  }, [status]);
+  }, [loginStatus]);
   return (
     <div className="h-screen flex justify-between">
       <div className=" w-full md:w-1/3 flex flex-col h-full justify-center px-10 ">
@@ -69,8 +77,8 @@ const Login = () => {
             <Form.Item>
               {showError ? (
                 <div className="flex  items-center gap-x-3">
-                  <p className="text-red-400 text-lg">{error}!!!</p>
-                  <Loading danger/>
+                  <p className="text-red-400 text-lg">{loginError}!!!</p>
+                  <Loading danger />
                 </div>
               ) : (
                 <Button
@@ -79,6 +87,7 @@ const Login = () => {
                   className="w-full"
                   size="large"
                   loading={loading}
+                  onClick={() => setIsClicked(true)}
                 >
                   Login
                 </Button>
