@@ -57,7 +57,7 @@ const StatisticPage = () => {
     legend: {
       color: {
         title: false,
-        position: "right",
+        position: "top",
         rowPadding: 5,
       },
     },
@@ -69,7 +69,7 @@ const StatisticPage = () => {
           x: "50%",
           y: "50%",
           textAlign: "center",
-          fontSize: 40,
+          fontSize: 20,
           fontStyle: "bold",
         },
       },

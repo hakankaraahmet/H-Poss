@@ -134,8 +134,8 @@ const CartPage = () => {
         scroll={{ x: 1200, y: 300 }}
         rowKey={"_id"}
       />
-      <div className="cart-total flex justify-end mt-4">
-        <Card className="w-72 select-none">
+      <div className="cart-total flex justify-end my-4 ">
+        <Card className="w-full md:w-72 select-none">
           <div className="flex justify-between">
             <span>Subtotal</span>
             <span>{total > 0 ? total.toFixed(2) : 0}$</span>

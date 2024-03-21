@@ -55,11 +55,11 @@ const Carts = () => {
         ) : (
           cartItems?.map((item) => (
             <li key={item._id} className="cart-item flex justify-between ">
-              <div className="flex items-center">
+              <div className="flex items-center flex-col">
                 <img
                   src={item.img}
                   alt={item.title}
-                  className="w-16 h-16 object-contain cursor-pointer"
+                  className="w-12 h-12 xl:w-16 xl:h-16 object-contain cursor-pointer"
                   onClick={() => onDelete(item)}
                 />
                 <div className="flex flex-col ml-2">

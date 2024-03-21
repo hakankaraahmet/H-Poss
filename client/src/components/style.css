@@ -10,7 +10,6 @@
   width: 100%;
   border-radius: 1rem;
   cursor: pointer;
-  min-width: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,4 +36,10 @@
 
 .edit-item:hover {
   background: linear-gradient(to right, #ff9f3e 0%, #ff7a16 100%);
+}
+
+@media (max-width: 767px) {
+  .category-item{
+    min-width: 150px;
+  }
 }
