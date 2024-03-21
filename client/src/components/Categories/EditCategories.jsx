@@ -14,14 +14,24 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
   const { categories, deleteStatus, editStatus } = useSelector(
     (state) => state.categories
   );
+  const { products } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   const onFinish = (values) => {
     dispatch(editCategory({ id: editingRow._id, categoryData: values }));
   };
 
   const onDelete = (id) => {
+    const isCategoryHaveProduct = products?.some(
+      (product) => product.categoryId._id === id
+    );
     if (window.confirm("Are you sure?")) {
-      dispatch(deleteCategory(id));
+      if (isCategoryHaveProduct) {
+        message.error(
+          "There is product with this category. You must delete product first!!!"
+        );
+      } else {
+        dispatch(deleteCategory(id));
+      }
     }
   };
 
@@ -33,7 +43,7 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
       dispatch(fetchCategories());
     }
   }, [editStatus]);
-  
+
   useEffect(() => {
     if (deleteStatus === "succeeded") {
       message.success("Category is deleted successfully");
@@ -79,7 +89,12 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
                 Save
               </Button>
             )}
-            <Button type="primary" className="ml-4" danger onClick={() => onDelete(record._id)}>
+            <Button
+              type="primary"
+              className="ml-4"
+              danger
+              onClick={() => onDelete(record._id)}
+            >
               Delete
             </Button>
           </Form.Item>

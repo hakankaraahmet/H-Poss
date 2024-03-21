@@ -6,7 +6,7 @@ import {
   editProduct,
   fetchProducts,
   resetDeleteStatus,
-  resetEditStatus
+  resetEditStatus,
 } from "../../redux/productSlice";
 import { Loading } from "../Common/Loading";
 import { fetchCategories } from "../../redux/categorySlice";
@@ -18,6 +18,7 @@ const EditProducts = () => {
   const { products, deleteStatus, editStatus, editError } = useSelector(
     (state) => state.products
   );
+  const { cartItems } = useSelector((state) => state.cart);
   const { categories } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
 
@@ -41,9 +42,18 @@ const EditProducts = () => {
     );
   };
 
+  console.log("cartItems :>> ", cartItems);
+
   const onDelete = (id) => {
+    const isProductInCart = cartItems?.some((item) => item._id === id);
     if (window.confirm("Are you sure?")) {
-      dispatch(deleteProduct(id));
+      if (isProductInCart) {
+        message.error(
+          "This product is in Cart. You must delete product from the cart first!!!"
+        );
+      } else {
+        dispatch(deleteProduct(id));
+      }
     }
   };
 
@@ -53,7 +63,6 @@ const EditProducts = () => {
       dispatch(resetDeleteStatus());
     }
   }, [deleteStatus, dispatch]);
-
 
   const columns = [
     {
@@ -103,7 +112,9 @@ const EditProducts = () => {
             <Button
               type="link"
               onClick={() => {
-                const selectedCategory = categories.find((item) => item._id === record.categoryId._id);
+                const selectedCategory = categories.find(
+                  (item) => item._id === record.categoryId._id
+                );
                 setEditingItem({
                   ...record,
                   categoryId: selectedCategory?.title,
@@ -131,12 +142,11 @@ const EditProducts = () => {
     } else if (editStatus === "failed") {
       setShowError(true);
       setTimeout(() => {
-        setShowError(false); 
+        setShowError(false);
         form.resetFields();
       }, 1500);
     }
   }, [editStatus]);
-
 
   return (
     <>
@@ -153,11 +163,11 @@ const EditProducts = () => {
         footer={false}
         onCancel={() => setIsEditModalOpen(false)}
       >
-      {showError && (
-        <div className="flex items-center gap-x-3">
-          <span>{addingError}</span> <Loading />
-        </div>
-      )}
+        {showError && (
+          <div className="flex items-center gap-x-3">
+            <span>{addingError}</span> <Loading />
+          </div>
+        )}
         {!showError && (
           <Form
             layout="vertical"
