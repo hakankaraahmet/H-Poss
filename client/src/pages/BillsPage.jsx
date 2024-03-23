@@ -91,6 +91,7 @@ const BillsPage = () => {
           pagination={false}
           rowKey={"_id"}
           scroll={{ x: 1000, y: 600 }}
+          className="mb-8"
         />
       )}
 

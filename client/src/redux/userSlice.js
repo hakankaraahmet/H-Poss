@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import { message } from "antd";
 
 const initialState = {
   user: null,
@@ -7,18 +7,18 @@ const initialState = {
   status: "idle",
   loginStatus: "idle",
   error: "",
-  loginError: ""
+  loginError: "",
 };
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
-  async ({token}) => {
+  async ({ token }) => {
     try {
       const res = await fetch(`${baseUrl}/tokens`);
       const data = await res.json();
-      const currentUser = data.data.find((item) => item.token === token)
+      const currentUser = data.data.find((item) => item.token === token);
       return currentUser;
     } catch (error) {
       throw new Error("Failed to fetch User from the API.");
@@ -41,7 +41,7 @@ export const register = createAsyncThunk(
       if (res.ok) {
         return data.user;
       } else {
-        return rejectWithValue(data.message || "Unknown error"); 
+        return rejectWithValue(data.message || "Unknown error");
       }
     } catch (error) {
       throw new Error(error);
@@ -75,14 +75,30 @@ export const login = createAsyncThunk(
           );
           if (isUserValid) {
             if (userData.remember) {
-            
               localStorage.setItem("userToken", exactUser.token);
             } else {
-           
+              const logoutRequestOptions = {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Token ${exactUser.token}`,
+                },
+              };
               localStorage.setItem("userToken", exactUser.token);
-              setTimeout(() => {
+              setTimeout(async () => {
                 localStorage.removeItem("userToken");
-              }, 15000);
+                message.error("Your login session has expired!!!");
+                try {
+                  const res = await fetch(
+                    `${baseUrl}/auth/logout`,
+                    logoutRequestOptions
+                  );
+                  const data = await res.json();
+                  return data;
+                } catch (error) {
+                  throw new Error("Failed to Logout.");
+                }
+              }, 3600000);
             }
             return data;
           } else {
@@ -107,22 +123,22 @@ const userSlice = createSlice({
   reducers: {
     resetStatus: (state) => {
       state.status = "idle";
-      state.loginStatus= "idle"
+      state.loginStatus = "idle";
     },
   },
   extraReducers: (builder) => {
     builder
-    .addCase(fetchUser.pending, (state) => {
-      state.status = "loading";
-    })
-    .addCase(fetchUser.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.user = action.payload;
-    })
-    .addCase(fetchUser.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.payload || "Unknown error";
-    })
+      .addCase(fetchUser.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+      })
+      .addCase(fetchUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Unknown error";
+      })
       .addCase(register.pending, (state) => {
         state.status = "loading";
       })

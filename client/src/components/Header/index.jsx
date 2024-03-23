@@ -41,7 +41,7 @@ const Header = () => {
         const data = await res.json();
         return data;
       } catch (error) {
-        throw new Error("Failed to fetch Bill from the API.");
+        throw new Error("Failed to Logout.");
       }
     }
   };

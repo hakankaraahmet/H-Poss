@@ -58,6 +58,7 @@ const CustomersPage = () => {
         pagination={false}
         scroll={{ x: 1000, y: 600 }}
         rowKey={"_id"}
+        className="mb-8"
       />
       )}
     </div>
