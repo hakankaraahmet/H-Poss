@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, Modal, message, Select } from "antd";
+import { Button, Form, Input, Modal, message, Select, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, resetAddStatus } from "../../redux/productSlice";
 import { Loading } from "../Common/Loading";
 import { fetchUser } from "../../redux/userSlice";
+import { UploadOutlined } from "@ant-design/icons";
+
 
 const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
   const [showError, setShowError] = useState(false);
@@ -15,15 +17,20 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
   const userToken = localStorage.getItem("userToken");
 
   useEffect(() => {
-    dispatch(fetchUser({token: userToken}))
-  },[])
-
+    dispatch(fetchUser({ token: userToken }));
+  }, []);
 
   const onFinish = (values) => {
     const selectedCategory = categories.find(
       (item) => item._id === values.categoryId
     );
-    dispatch(addProduct({ ...values, categoryId: selectedCategory._id, userId: user?._id }));
+    dispatch(
+      addProduct({
+        ...values,
+        categoryId: selectedCategory._id,
+        userId: user?._id,
+      })
+    );
     form.resetFields();
   };
 
@@ -41,6 +48,27 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
     }
   }, [addingStatus]);
 
+  const props = {
+    name: 'file',
+    action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
+    headers: {
+      authorization: 'authorization-text',
+    },
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+        form.setFieldsValue({ // Set the uploaded file to the form field
+          image: info.file
+        });
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+  
 
   return (
     <Modal
@@ -49,11 +77,11 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
       footer={false}
       onCancel={() => setIsAddModalOpen(false)}
     >
-    {showError && (
-      <div className="flex items-center gap-x-3">
-        <span>{addingError}</span> <Loading />
-      </div>
-    )}
+      {showError && (
+        <div className="flex items-center gap-x-3">
+          <span>{addingError}</span> <Loading />
+        </div>
+      )}
       {!showError && (
         <Form layout="vertical" onFinish={onFinish} form={form}>
           <Form.Item
@@ -65,10 +93,12 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
           </Form.Item>
           <Form.Item
             label="Product Image"
-            name="img"
+            name="image"
             rules={[{ required: true, message: "This area can't be empty!" }]}
           >
-            <Input placeholder="Please enter a product image" />
+          <Upload {...props}>
+          <Button icon={<UploadOutlined />}>Click to Upload</Button>
+        </Upload>
           </Form.Item>
           <Form.Item
             label="Product Price"

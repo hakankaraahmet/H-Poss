@@ -8,6 +8,7 @@ import {
   resetDeleteStatus,
   resetEditStatus,
 } from "../../redux/categorySlice";
+import { fetchProducts } from "../../redux/productSlice";
 const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
   const [editingRow, setEditingRow] = useState({});
   const [form] = Form.useForm();
@@ -20,9 +21,14 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
     dispatch(editCategory({ id: editingRow._id, categoryData: values }));
   };
 
+  useEffect(() => {
+    dispatch(fetchProducts())
+  },[isModalOpen])
+
+
   const onDelete = (id) => {
-    const isCategoryHaveProduct = products?.some(
-      (product) => product.categoryId._id === id
+    const isCategoryHaveProduct = products?.find(
+      (product) => product.categoryId?._id === id
     );
     if (window.confirm("Are you sure?")) {
       if (isCategoryHaveProduct) {
@@ -93,7 +99,9 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
               type="primary"
               className="ml-4"
               danger
-              onClick={() => onDelete(record._id)}
+              onClick={() => {
+                onDelete(record._id);
+              }}
             >
               Delete
             </Button>

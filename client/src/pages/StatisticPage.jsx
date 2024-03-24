@@ -65,7 +65,7 @@ const StatisticPage = () => {
       {
         type: "text",
         style: {
-          text: "Total\nValue",
+          text: bills.length > 0 && "Total\nValue",
           x: "50%",
           y: "50%",
           textAlign: "center",

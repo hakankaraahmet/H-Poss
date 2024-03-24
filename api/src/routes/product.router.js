@@ -2,14 +2,15 @@
 
 const router = require("express").Router();
 const product = require("../controllers/product.controller");
+const upload = require('../middlewares/upload')
 
 router.get("/", product.list);
-router.post("/add-product", product.create);
+router.post("/add-product",upload.single('image'), product.create);
 router
   .route("/:id")
   .get(product.read)
-  .put(product.update)
-  .patch(product.update)
+  .put(upload.single('image'),product.update)
+  .patch(upload.single('image'),product.update)
   .delete(product.delete);
 
 module.exports = router;

@@ -4,10 +4,13 @@ import { message } from "antd";
 
 const ProductItem = ({ product }) => {
   const dispatch = useDispatch();
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const handleClick = () => {
     dispatch(addProduct({ ...product, quantity: 1 }));
     message.success("Product is added successfully");
   };
+
+
   return (
     <div
       onClick={handleClick}
@@ -15,7 +18,7 @@ const ProductItem = ({ product }) => {
     >
       <div className="product-image">
         <img
-          src={product.img}
+          src={baseUrl + product.image[0]}
           alt={product.title}
           className="h-28 object-contain w-full border-b rounded-t-xl "
         />

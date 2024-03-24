@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Input, Modal, Table, message, Select } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Table,
+  message,
+  Select,
+  Upload,
+} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteProduct,
@@ -10,6 +19,7 @@ import {
 } from "../../redux/productSlice";
 import { Loading } from "../Common/Loading";
 import { fetchCategories } from "../../redux/categorySlice";
+import { UploadOutlined } from "@ant-design/icons";
 const EditProducts = () => {
   const [editingItem, setEditingItem] = useState({});
   const [form] = Form.useForm();
@@ -21,13 +31,14 @@ const EditProducts = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { categories } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, []);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     dispatch(fetchCategories());
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
   }, []);
 
   const onFinish = (values) => {
@@ -42,10 +53,8 @@ const EditProducts = () => {
     );
   };
 
-  console.log("cartItems :>> ", cartItems);
-
   const onDelete = (id) => {
-    const isProductInCart = cartItems?.some((item) => item._id === id);
+    const isProductInCart = cartItems?.some((item) => item?._id === id);
     if (window.confirm("Are you sure?")) {
       if (isProductInCart) {
         message.error(
@@ -76,12 +85,12 @@ const EditProducts = () => {
     },
     {
       title: "Product Image",
-      dataIndex: "img",
+      dataIndex: "image",
       width: "4%",
       render: (_, record) => {
         return (
           <img
-            src={record.img}
+            src={baseUrl + record.image[0]}
             alt={record.title}
             className="w-20 h-20 object-contain"
           />
@@ -148,6 +157,33 @@ const EditProducts = () => {
     }
   }, [editStatus]);
 
+  const props = {
+    name: "file",
+    action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+        form.setFieldsValue({
+          image: info.file,
+        });
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+
+  useEffect(() => {
+    if (isEditModalOpen) {
+      form.setFieldsValue(editingItem);
+    }
+  }, [isEditModalOpen]);
+
   return (
     <>
       <Table
@@ -165,7 +201,7 @@ const EditProducts = () => {
       >
         {showError && (
           <div className="flex items-center gap-x-3">
-            <span>{addingError}</span> <Loading />
+            <span>{editError}</span> <Loading />
           </div>
         )}
         {!showError && (
@@ -184,10 +220,12 @@ const EditProducts = () => {
             </Form.Item>
             <Form.Item
               label="Product Image"
-              name="img"
+              name="image"
               rules={[{ required: true, message: "This area can't be empty!" }]}
             >
-              <Input placeholder="Please enter a product image" />
+              <Upload {...props}>
+                <Button icon={<UploadOutlined />}>Change the Image</Button>
+              </Upload>
             </Form.Item>
             <Form.Item
               label="Product Price"

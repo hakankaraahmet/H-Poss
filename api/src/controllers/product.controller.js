@@ -13,7 +13,9 @@ module.exports = {
   },
   create: async (req, res) => {
     const { title } = req.body;
+    req.body.image = "/img/" + req.file?.filename || [];
     const existingTitle = await Product.findOne({ title });
+
     if (existingTitle) {
       res.status(409).send({
         error: false,
@@ -39,24 +41,19 @@ module.exports = {
     });
   },
   update: async (req, res) => {
-    const { title } = req.body;
-    const existingTitle = await Product.findOne({ title });
-    if (existingTitle) {
-      res.status(409).send({
-        error: false,
-        message: "This Product name is already used :(",
-      });
-    } else {
-      const data = await Product.updateOne({ _id: req.params.id }, req.body, {
-        runValidators: true,
-      });
-      res.status(202).send({
-        error: false,
-        message: "UPDATED",
-        data,
-        new: await Product.findOne({ _id: req.params.id }),
-      });
-    }
+    const formerImage = await Product.findOne({ _id: req.params.id });
+    req.body.image = req.file?.filename
+      ? "/img/" + req.file?.filename
+      : formerImage.image;
+    const data = await Product.updateOne({ _id: req.params.id }, req.body, {
+      runValidators: true,
+    });
+    res.status(202).send({
+      error: false,
+      message: "UPDATED",
+      data,
+      new: await Product.findOne({ _id: req.params.id }),
+    });
   },
   delete: async (req, res) => {
     const data = await Product.deleteOne({ _id: req.params.id });

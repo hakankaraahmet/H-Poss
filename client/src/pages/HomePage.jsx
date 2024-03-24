@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Categories from "../components/Categories";
 import Carts from "../components/Carts";
 import Products from "../components/Products";
+
 const HomePage = () => {
   return (
     <div>

@@ -15,6 +15,7 @@ const { dbConnection } = require("./src/configs/dbConnection");
 dbConnection();
 // --------***--------MIDDLEWARES
 app.use(express.json());
+app.use('/img', express.static('./upload'))
 app.use(require("./src/middlewares/authentication"));
 app.use(require("./src/middlewares/findSearchSortPage"));
 app.use(require("./src/middlewares/cors"));

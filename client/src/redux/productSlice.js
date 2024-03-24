@@ -30,14 +30,20 @@ export const fetchProducts = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (productData, { rejectWithValue }) => {
+    const formData = new FormData();
+    formData.append('title', productData.title);
+    formData.append('price', productData.price);
+    formData.append('categoryId', productData.categoryId);
+    formData.append('userId', productData.userId);
+    formData.append('image', productData.image.originFileObj);
     try {
       const res = await fetch(`${baseUrl}/products/add-product`, {
         method: "POST",
-        body: JSON.stringify(productData),
+        body: formData,
         mode: "cors",
         credentials: "same-origin",
-        headers: { "Content-type": "application/json; charset=UTF-8" },
       });
+
       const data = await res.json();
       if (res.ok) {
         return data.data;
@@ -53,13 +59,17 @@ export const addProduct = createAsyncThunk(
 export const editProduct = createAsyncThunk(
   "products/editProduct",
   async ({ id, productData }, { rejectWithValue }) => {
+    const formData = new FormData();
+    formData.append('title', productData.title);
+    formData.append('price', productData.price);
+    formData.append('categoryId', productData.categoryId);
+    formData.append('image', productData.image.originFileObj);
     try {
       const res = await fetch(`${baseUrl}/products/${id}`, {
         method: "PUT",
-        body: JSON.stringify(productData),
+        body: formData,
         mode: "cors",
-        credentials: "same-origin",
-        headers: { "Content-type": "application/json; charset=UTF-8" },
+        credentials: "same-origin"
       });
       const data = await res.json();
       if (res.ok) {
