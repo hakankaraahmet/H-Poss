@@ -18,7 +18,8 @@ const Carts = () => {
   const { cartItems, total, tax } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const taxAmount = (total * tax) / 100;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   const onDelete = (item) => {
     if (window.confirm("Are you sure to delete the product?")) {
@@ -44,6 +45,8 @@ const Carts = () => {
       message.success("Products are deleted successfully");
     }
   };
+
+
   return (
     <div className="carts h-full max-h-[calc(100vh_-_92px)] flex flex-col">
       <h2 className="bg-gradient-to-r select-none  from-blue-900 via-blue-800 to-blue-700 text-center py-4 text-white font-bold tracking-wide">
@@ -53,43 +56,45 @@ const Carts = () => {
         {cartItems?.length === 0 ? (
           <p>There is no product in the cart...</p>
         ) : (
-          cartItems?.map((item) => (
-            <li key={item._id} className="cart-item flex justify-between ">
-              <div className="flex items-center flex-col">
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  className="w-12 h-12 xl:w-16 xl:h-16 object-contain cursor-pointer"
-                  onClick={() => onDelete(item)}
-                />
-                <div className="flex flex-col ml-2">
-                  <b>{item.title}</b>
-                  <span>
-                    {item.price.toFixed(2)}$ x {item.quantity}
-                  </span>
+          cartItems
+            ?.map((item) => (
+              <li key={item._id} className="cart-item flex justify-between ">
+                <div className="flex items-center flex-col">
+                  <img
+                    src={item? baseUrl + item?.image[0] : ""}
+                    alt={item.title}
+                    className="w-12 h-12 xl:w-16 xl:h-16 object-contain cursor-pointer"
+                    onClick={() => onDelete(item)}
+                  />
+                  <div className="flex flex-col ml-2">
+                    <b>{item.title}</b>
+                    <span>
+                      {item.price.toFixed(2)}$ x {item.quantity}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center ">
-                <Button
-                  type="primary"
-                  size="small"
-                  className="w-full  flex items-center justify-center rounded-full"
-                  icon={<MinusCircleOutlined />}
-                  onClick={() => onReduce(item)}
-                />
-                <span className="font-bold inline-flex text-center w-6 justify-center">
-                  {item.quantity}
-                </span>
-                <Button
-                  type="primary"
-                  size="small"
-                  className="w-full  flex items-center justify-center rounded-full"
-                  icon={<PlusCircleOutlined />}
-                  onClick={() => dispatch(increaseCart(item))}
-                />
-              </div>
-            </li>
-          )).reverse()
+                <div className="flex items-center ">
+                  <Button
+                    type="primary"
+                    size="small"
+                    className="w-full  flex items-center justify-center rounded-full"
+                    icon={<MinusCircleOutlined />}
+                    onClick={() => onReduce(item)}
+                  />
+                  <span className="font-bold inline-flex text-center w-6 justify-center">
+                    {item.quantity}
+                  </span>
+                  <Button
+                    type="primary"
+                    size="small"
+                    className="w-full  flex items-center justify-center rounded-full"
+                    icon={<PlusCircleOutlined />}
+                    onClick={() => dispatch(increaseCart(item))}
+                  />
+                </div>
+              </li>
+            ))
+            .reverse()
         )}
       </ul>
       <div className="cart-totals mt-auto">
@@ -118,7 +123,7 @@ const Carts = () => {
             size="large"
             className="w-full "
             disabled={cartItems?.length === 0}
-            onClick={() => navigate('/cart')}
+            onClick={() => navigate("/cart")}
           >
             Create Order
           </Button>

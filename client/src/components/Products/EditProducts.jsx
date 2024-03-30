@@ -1,14 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  Table,
-  message,
-  Select,
-  Upload,
-} from "antd";
+import React, { useState, useEffect, useRef } from "react";
+import { Button, Form, Input, Modal, Table, message, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteProduct,
@@ -19,12 +10,14 @@ import {
 } from "../../redux/productSlice";
 import { Loading } from "../Common/Loading";
 import { fetchCategories } from "../../redux/categorySlice";
-import { UploadOutlined } from "@ant-design/icons";
+import ImageUploader from "./ImageUploader";
 const EditProducts = () => {
   const [editingItem, setEditingItem] = useState({});
   const [form] = Form.useForm();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [imageFile, setImageFile] = useState();
+  const inputRef = useRef(null);
   const { products, deleteStatus, editStatus, editError } = useSelector(
     (state) => state.products
   );
@@ -42,17 +35,30 @@ const EditProducts = () => {
   }, []);
 
   const onFinish = (values) => {
-    const selectedCategory = categories.find(
-      (item) => item.title === values.categoryId
-    );
-    dispatch(
-      editProduct({
-        id: editingItem._id,
-        productData: { ...values, categoryId: selectedCategory._id },
-      })
-    );
+    const isProductInCart = cartItems?.some((item) => item?._id === editingItem._id);
+    if (isProductInCart) {
+      message.error(
+        "This product is in Cart. You must delete product from the cart first in order to change product!!!"
+      );
+    } else {
+      const selectedCategory = categories.find(
+        (item) => item.title === values.categoryId
+      );
+      dispatch(
+        editProduct({
+          id: editingItem._id,
+          productData: {
+            ...values,
+            categoryId: selectedCategory._id,
+            image: imageFile ? imageFile : editingItem.image,
+          },
+        })
+      );
+      resetInput();
+      setImageFile("");
+      form.resetFields();
+    }
   };
-
   const onDelete = (id) => {
     const isProductInCart = cartItems?.some((item) => item?._id === id);
     if (window.confirm("Are you sure?")) {
@@ -157,32 +163,17 @@ const EditProducts = () => {
     }
   }, [editStatus]);
 
-  const props = {
-    name: "file",
-    action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-        form.setFieldsValue({
-          image: info.file,
-        });
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
-
   useEffect(() => {
     if (isEditModalOpen) {
       form.setFieldsValue(editingItem);
     }
   }, [isEditModalOpen]);
+
+  const resetInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
 
   return (
     <>
@@ -197,7 +188,9 @@ const EditProducts = () => {
         title="Edit Product"
         open={isEditModalOpen}
         footer={false}
-        onCancel={() => setIsEditModalOpen(false)}
+        onCancel={() => {
+          setIsEditModalOpen(false), resetInput(), setImageFile("");
+        }}
       >
         {showError && (
           <div className="flex items-center gap-x-3">
@@ -218,15 +211,14 @@ const EditProducts = () => {
             >
               <Input placeholder="Please enter a product name" />
             </Form.Item>
-            <Form.Item
-              label="Product Image"
-              name="image"
-              rules={[{ required: true, message: "This area can't be empty!" }]}
-            >
-              <Upload {...props}>
-                <Button icon={<UploadOutlined />}>Change the Image</Button>
-              </Upload>
-            </Form.Item>
+
+            <ImageUploader
+              setImageFile={setImageFile}
+              imageFile={imageFile}
+              inputRef={inputRef}
+              isRequired={false}
+            />
+
             <Form.Item
               label="Product Price"
               name="price"

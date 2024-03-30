@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Card, Button, message, Popconfirm,} from "antd";
+import { Table, Card, Button, message, Popconfirm } from "antd";
 import CreateBill from "../components/Carts/CreateBill";
 import { useDispatch, useSelector } from "react-redux";
 import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
@@ -23,7 +23,7 @@ const CartPage = () => {
       dispatch(reduceCart(item));
     }
   };
-
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const columns = [
     {
       title: "Product Image",
@@ -32,7 +32,7 @@ const CartPage = () => {
       render: (_, record) => {
         return (
           <img
-            src={record.img}
+            src={baseUrl + record?.image[0]}
             alt={record.title}
             className="w-20 h-20 object-contain"
           />
@@ -55,9 +55,7 @@ const CartPage = () => {
       title: "Category",
       dataIndex: "categoryId",
       render: (_, record) => {
-        return (
-          <p>{record.categoryId.title}</p>
-        );
+        return <p>{record.categoryId.title}</p>;
       },
     },
     {

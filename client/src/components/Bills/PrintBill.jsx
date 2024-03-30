@@ -3,7 +3,7 @@ import { Modal, Button } from "antd";
 import { useReactToPrint } from "react-to-print";
 const PrintBill = ({ customer, isModalOpen, setIsModalOpen }) => {
   const componentRef = useRef();
-
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -105,7 +105,7 @@ const PrintBill = ({ customer, isModalOpen, setIsModalOpen }) => {
                       <td className="py-4 pr-3 hidden sm:table-cell">
                         <img
                           className="w-12 h-12 object-contain"
-                          src={item.img}
+                          src={baseUrl + item?.image[0]}
                           alt={item.title}
                         />
                       </td>

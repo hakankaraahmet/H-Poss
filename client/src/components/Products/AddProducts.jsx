@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Button, Form, Input, Modal, message, Select, Upload } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Form, Input, Modal, message, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, resetAddStatus } from "../../redux/productSlice";
 import { Loading } from "../Common/Loading";
 import { fetchUser } from "../../redux/userSlice";
-import { UploadOutlined } from "@ant-design/icons";
-
+import ImageUploader from "./ImageUploader";
 
 const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
+  const [imageFile, setImageFile] = useState();
+  const inputRef = useRef(null);
   const [showError, setShowError] = useState(false);
   const { addingStatus, addingError } = useSelector((state) => state.products);
   const { categories } = useSelector((state) => state.categories);
@@ -28,9 +29,12 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
       addProduct({
         ...values,
         categoryId: selectedCategory._id,
+        image: imageFile,
         userId: user?._id,
       })
     );
+    resetInput();
+    setImageFile("");
     form.resetFields();
   };
 
@@ -48,34 +52,20 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
     }
   }, [addingStatus]);
 
-  const props = {
-    name: 'file',
-    action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-    headers: {
-      authorization: 'authorization-text',
-    },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-        form.setFieldsValue({ // Set the uploaded file to the form field
-          image: info.file
-        });
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
+  const resetInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
-  
 
   return (
     <Modal
       title="Add New Product"
       open={isModalOpen}
       footer={false}
-      onCancel={() => setIsAddModalOpen(false)}
+      onCancel={() => {
+        setIsAddModalOpen(false), resetInput(), setImageFile(""), form.resetFields();
+      }}
     >
       {showError && (
         <div className="flex items-center gap-x-3">
@@ -91,15 +81,13 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
           >
             <Input placeholder="Please enter a product name" />
           </Form.Item>
-          <Form.Item
-            label="Product Image"
-            name="image"
-            rules={[{ required: true, message: "This area can't be empty!" }]}
-          >
-          <Upload {...props}>
-          <Button icon={<UploadOutlined />}>Click to Upload</Button>
-        </Upload>
-          </Form.Item>
+
+          <ImageUploader
+            setImageFile={setImageFile}
+            imageFile={imageFile}
+            inputRef={inputRef}
+            isRequired={true}
+          />
           <Form.Item
             label="Product Price"
             name="price"
