@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 
 require("dotenv").config();
-const PORT = process.env.PORT ?? "8000";
+const PORT = process.env.PORT ?? 8000;
 require("express-async-errors");
 app.use(cors());
 // -------------------------------***-------------------------------
