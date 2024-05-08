@@ -18,6 +18,7 @@ import { addProductSearch } from "../../redux/appSlice";
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const token = localStorage.getItem("userToken");
   const dispatch = useDispatch();
@@ -60,7 +61,7 @@ const Header = () => {
       badge: true,
       icon: (
         <Badge
-          count={cartItems?.length}
+          count={cartItems?.filter(item => item?.userId._id === user?.userId).length}
           className={` ${
             location.pathname === "/cart" && "text-[#40a9ff]"
           } badge`}
@@ -143,7 +144,7 @@ const Header = () => {
           }`}
         >
           <Badge
-            count={cartItems?.length}
+            count={cartItems?.filter(item => item?.userId._id === user?.userId)?.length}
             className={` ${
               location.pathname === "/cart" && "text-[#40a9ff]"
             } badge`}

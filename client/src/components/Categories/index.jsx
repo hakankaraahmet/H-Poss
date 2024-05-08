@@ -10,13 +10,14 @@ import { Spin } from "antd";
 const Categories = () => {
   const { categories, status } = useSelector((state) => state.categories);
   const { filteredCategory } = useSelector((state) => state.app);
+  const { user } = useSelector((state) => state.user);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, []);
+    dispatch(fetchCategories({ userId: user?.userId }));
+  }, [user]);
 
   return (
     <ul className= {`md:flex-col gap-4  text-lg flex`}>

@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 const Carts = () => {
   const { cartItems, total, tax } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const taxAmount = (total * tax) / 100;
   const navigate = useNavigate();
@@ -46,7 +47,6 @@ const Carts = () => {
     }
   };
 
-
   return (
     <div className="carts h-full max-h-[calc(100vh_-_92px)] flex flex-col">
       <h2 className="bg-gradient-to-r select-none  from-blue-900 via-blue-800 to-blue-700 text-center py-4 text-white font-bold tracking-wide">
@@ -57,11 +57,12 @@ const Carts = () => {
           <p>There is no product in the cart...</p>
         ) : (
           cartItems
+            ?.filter((item) => item?.userId._id === user?.userId)
             ?.map((item) => (
               <li key={item._id} className="cart-item flex justify-between ">
                 <div className="flex items-center flex-col">
                   <img
-                    src={item? baseUrl + item?.image[0] : ""}
+                    src={item ? baseUrl + item?.image[0] : ""}
                     alt={item.title}
                     className="w-12 h-12 xl:w-16 xl:h-16 object-contain cursor-pointer"
                     onClick={() => onDelete(item)}

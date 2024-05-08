@@ -17,7 +17,7 @@ const AddCategory = ({ isModalOpen, setIsAddModalOpen }) => {
   const userToken = localStorage.getItem("userToken");
 
   const onFinish = (values) => {
-    dispatch(addCategory({title: values.title, userId: user?._id }));
+    dispatch(addCategory({title: values.title, userId: user?.userId }));
     form.resetFields();
   };
   useEffect(() => {

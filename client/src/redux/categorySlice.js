@@ -16,11 +16,11 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
-  async () => {
+  async (user) => {
     try {
       const res = await fetch(`${baseUrl}/categories`);
       const data = await res.json();
-      const finalData = data.data.map((item) => {
+      const finalData = data.data.filter(category=> category.userId._id === user.userId).map((item) => {
         return { ...item, value: item.title };
       });
       return finalData;

@@ -11,6 +11,7 @@ const CartPage = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const { cartItems, total, tax } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const taxAmount = (total * tax) / 100;
   const onReduce = (item) => {
@@ -125,7 +126,7 @@ const CartPage = () => {
   return (
     <div className="px-6">
       <Table
-        dataSource={cartItems}
+        dataSource={cartItems.filter(item => item?.userId._id === user?.userId)}
         columns={columns}
         bordered
         pagination={false}
@@ -154,7 +155,7 @@ const CartPage = () => {
             className=" w-full mt-4 capitalize select-none"
             size="large"
             onClick={() => setIsModalOpen(true)}
-            disabled={cartItems.length === 0}
+            disabled={cartItems.filter(item => item?.userId._id === user?.userId).length === 0}
           >
             Create Order
           </Button>

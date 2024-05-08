@@ -14,11 +14,11 @@ const initialState = {
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
-export const fetchBills = createAsyncThunk("bills/fetchBills", async () => {
+export const fetchBills = createAsyncThunk("bills/fetchBills", async (user) => {
   try {
     const res = await fetch(`${baseUrl}/bills`);
     const data = await res.json();
-    const finalData = data.data.map((item) => {
+    const finalData = data.data.filter(bill => bill.userId._id === user.userId).map((item) => {
       return { ...item, value: item.title };
     });
     return finalData;

@@ -16,11 +16,11 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async () => {
+  async (user) => {
     try {
       const res = await fetch(`${baseUrl}/products`);
       const data = await res.json();
-      return data.data;
+      return data.data.filter(product => product?.userId._id === user?.userId);
     } catch (error) {
       throw new Error("Failed to fetch Product from the API.");
     }

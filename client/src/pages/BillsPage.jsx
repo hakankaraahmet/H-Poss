@@ -10,11 +10,12 @@ const BillsPage = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const { bills, status } = useSelector((state) => state.bills);
+  const { user } = useSelector((state) => state.user);
   const [customer, setCustomer] = useState({});
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchBills());
-  }, []);
+    dispatch(fetchBills({ userId: user?.userId }));
+  }, [user]);
 
   const columns = [
     {

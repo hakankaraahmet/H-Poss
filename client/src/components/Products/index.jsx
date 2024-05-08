@@ -10,16 +10,23 @@ import { Spin } from "antd";
 const Products = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { products, status } = useSelector((state) => state.products);
+  const { user } = useSelector((state) => state.user);
   const { filteredCategory, productSearch } = useSelector((state) => state.app);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, []);
+    dispatch(fetchProducts({ userId: user?.userId }));
+  }, [user]);
   return (
-    <div className= {` ${status === "loading" ? 'flex justify-center items-center  lg:h-1/2' : 'products-wrapper grid gap-4 grid-cols-card  relative'}`}>
+    <div
+      className={` ${
+        status === "loading"
+          ? "flex justify-center items-center  lg:h-1/2"
+          : "products-wrapper grid gap-4 grid-cols-card  relative"
+      }`}
+    >
       {status === "loading" ? (
-        <Spin size="large" className="mt-16 lg:mt-0"/>
+        <Spin size="large" className="mt-16 lg:mt-0" />
       ) : products.length === 0 ? (
         <p className="text-lg text-[#40a9ff] capitalize">
           There is no product. Please add some...
