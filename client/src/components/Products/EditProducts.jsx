@@ -16,6 +16,7 @@ const EditProducts = () => {
   const [form] = Form.useForm();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showError, setShowError] = useState(false);
+  const { user } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState();
   const inputRef = useRef(null);
   const { products, deleteStatus, editStatus, editError } = useSelector(
@@ -27,11 +28,11 @@ const EditProducts = () => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
-    dispatch(fetchCategories());
+    dispatch(fetchCategories({ userId: user?.userId }));
   }, []);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(fetchProducts({ userId: user?.userId }));
   }, []);
 
   const onFinish = (values) => {
