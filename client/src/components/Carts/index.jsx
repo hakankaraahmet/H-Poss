@@ -46,7 +46,7 @@ const Carts = () => {
       message.success("Products are deleted successfully");
     }
   };
-
+console.log('cartItems :>> ', cartItems);
   return (
     <div className="carts h-full max-h-[calc(100vh_-_92px)] flex flex-col">
       <h2 className="bg-gradient-to-r select-none  from-blue-900 via-blue-800 to-blue-700 text-center py-4 text-white font-bold tracking-wide">
@@ -57,7 +57,7 @@ const Carts = () => {
           <p>There is no product in the cart...</p>
         ) : (
           cartItems
-            ?.filter((item) => item?.userId._id === user?.userId)
+            ?.filter((item) => item?.userId === user?.userId)
             ?.map((item) => (
               <li key={item._id} className="cart-item flex justify-between ">
                 <div className="flex items-center flex-col">

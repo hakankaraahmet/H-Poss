@@ -126,7 +126,7 @@ const CartPage = () => {
   return (
     <div className="px-6">
       <Table
-        dataSource={cartItems.filter(item => item?.userId._id === user?.userId)}
+        dataSource={cartItems.filter(item => item?.userId === user?.userId)}
         columns={columns}
         bordered
         pagination={false}

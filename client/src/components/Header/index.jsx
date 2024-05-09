@@ -61,7 +61,7 @@ const Header = () => {
       badge: true,
       icon: (
         <Badge
-          count={cartItems?.filter(item => item?.userId._id === user?.userId).length}
+          count={cartItems?.filter(item => item?.userId === user?.userId).length}
           className={` ${
             location.pathname === "/cart" && "text-[#40a9ff]"
           } badge`}
@@ -144,7 +144,7 @@ const Header = () => {
           }`}
         >
           <Badge
-            count={cartItems?.filter(item => item?.userId._id === user?.userId)?.length}
+            count={cartItems?.filter(item => item?.userId === user?.userId)?.length}
             className={` ${
               location.pathname === "/cart" && "text-[#40a9ff]"
             } badge`}
