@@ -30,7 +30,7 @@ const AddProduct = ({ isModalOpen, setIsAddModalOpen }) => {
         ...values,
         categoryId: selectedCategory._id,
         image: imageFile,
-        userId: user?.userId,
+        userId: user?._id,
       })
     );
     resetInput();

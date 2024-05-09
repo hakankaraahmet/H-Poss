@@ -15,7 +15,6 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
   const { categories, deleteStatus, editStatus } = useSelector(
     (state) => state.categories
   );
-  const { user } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   const onFinish = (values) => {
@@ -23,7 +22,7 @@ const EditCategories = ({ isModalOpen, setIsEditModalOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(fetchProducts({ userId: user?.userId }))
+    dispatch(fetchProducts())
   },[isModalOpen])
 
 

@@ -15,9 +15,9 @@ const StatisticPage = () => {
   const dispatch = useDispatch();
   const baseUrl = import.meta.env.VITE_BASE_URL;
   useEffect(() => {
-    dispatch(fetchBills({ userId: user?.userId }));
-    dispatch(fetchProducts({ userId: user?.userId }));
-  }, [user]);
+    dispatch(fetchBills());
+    dispatch(fetchProducts());
+  }, []);
 
   const transformedBills = Object.values(
     bills.reduce((acc, { customerName, subTotal }) => {

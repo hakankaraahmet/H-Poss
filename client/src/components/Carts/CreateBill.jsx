@@ -32,7 +32,7 @@ const CreateBill = ({ isModalOpen, setIsModalOpen }) => {
         tax: taxAmount.toFixed(2),
         totalAmount: (total + taxAmount).toFixed(2),
         cartItems: cartItems,
-        userId: user?.userId
+        userId: user?._id
       })
     );
   };

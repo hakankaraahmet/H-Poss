@@ -10,12 +10,12 @@ const BillsPage = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const { bills, status } = useSelector((state) => state.bills);
-  const { user } = useSelector((state) => state.user);
+
   const [customer, setCustomer] = useState({});
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchBills({ userId: user?.userId }));
-  }, [user]);
+    dispatch(fetchBills());
+  }, []);
 
   const columns = [
     {
@@ -83,7 +83,10 @@ const BillsPage = () => {
     <div className="px-6">
       <h1 className="text-4xl font-bold text-center mb-4">Bills</h1>
       {status === "loading" ? (
-        <Spin size="large" className="absolute w-full inset-x-0 mx-auto mt-10" />
+        <Spin
+          size="large"
+          className="absolute w-full inset-x-0 mx-auto mt-10"
+        />
       ) : (
         <Table
           dataSource={bills}

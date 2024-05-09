@@ -10,13 +10,13 @@ import { Spin } from "antd";
 const Products = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { products, status } = useSelector((state) => state.products);
-  const { user } = useSelector((state) => state.user);
+
   const { filteredCategory, productSearch } = useSelector((state) => state.app);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProducts({ userId: user?.userId }));
-  }, [user]);
+    dispatch(fetchProducts());
+  }, []);
   return (
     <div
       className={` ${
